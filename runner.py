@@ -1,8 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-# Version 2.02
+# Version 2.10
 # - .01 = environmental variable support
 # - .02 = branch through the children of a process id
+# - .10 = update to support python3
 
 # Load Primary Libraries
 import sys
@@ -39,26 +40,12 @@ def get_process_children(pid):
     stdout, stderr = p.communicate()
     return [int(p) for p in stdout.split()]
 
-def run(_exec, _input, *_envvar):
+def run(_exec, _input, _timeout=20, _envvar={}):
     _newenv = os.environ.copy()
-    # I expect envvar to be a string like:
-    # a=2
-    # a=2, b=3, c=happy happy joy joy, d=4
-    if _envvar:
-        _envvar = string.strip(_envvar[0])
-        if string.find(_envvar, ',') == -1:
-            _envvar = [_envvar]
-        else:
-            _envvar = string.splitfields(_envvar, ',')
-        for evar in _envvar:
-            evar = string.strip(evar)
-            if evar != '' and string.find(evar, '=') != -1:
-                evar = string.splitfields(evar, '=')
-                valu = string.strip(evar[1])
-                evar = string.strip(evar[0])
-                _newenv[evar] = valu
+    for key in _envvar:
+        os.environ[key] = _envvar[key]
     _start = time.time()
-    cmd = string.splitfields(string.strip(_exec), ' ')
+    cmd = _exec.strip().split(' ')
     p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, env=_newenv)
     setNonBlocking(p.stdout)
     setNonBlocking(p.stderr)
@@ -70,7 +57,7 @@ def run(_exec, _input, *_envvar):
         for line in _input:
             p.stdin.write(line+'\n')    ###DANGER: that \n could be bad...
     signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(6)                     ###HOW MUCH TIME TO GIVE THEM TO RUN THEIR PROGRAM####
+    signal.alarm(_timeout)                     ###HOW MUCH TIME TO GIVE THEM TO RUN THEIR PROGRAM####
     stdout = ''
     stderr = 'inf'
     try:
@@ -94,5 +81,6 @@ def run(_exec, _input, *_envvar):
                 os.kill(pid, signal.SIGKILL)
             except OSError:
                 pass
+    os.environ = _newenv
     _etime = time.time() - _start
     return stdout, stderr, _return_code, _etime
