@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 
-# Version 2.10
+# Submit System Grader Version 3.0
+# This library will handle running external programs
+
+# Runner Version 2.10
 # - .01 = environmental variable support
 # - .02 = branch through the children of a process id
 # - .10 = update to support python3
 
-# Load Primary Libraries
+# Load in sys to prevent .pyc and cache files
 import sys
-# Prevents the creation of .pyc files - which appear broken on zee
 sys.dont_write_bytecode = True
-import os,string,time, fcntl
 
+# Load Primary Libraries
+import os, string, time, fcntl #, shlex
+
+# Load in Subprocess (used to run external programs)
 from subprocess import Popen, PIPE, STDOUT
 
-##########################################
-###  This is the primary run function  ###
-##########################################
-#http://stackoverflow.com/questions/1191374/subprocess-with-timeout
-#http://thraxil.org/users/anders/posts/2008/03/13/Subprocess-Hanging-PIPE-is-your-enemy/
-#http://stackoverflow.com/questions/19880190/interactive-input-output-using-python
+# Build the alarm section (to kill a program in process)
 import signal
 class Alarm(Exception):
     pass
@@ -40,28 +40,28 @@ def get_process_children(pid):
     stdout, stderr = p.communicate()
     return [int(p) for p in stdout.split()]
 
-def run(_exec, _input, _timeout=20, _envvar={}):
+# This is the function that will run all external code
+def run(_exec, _input, _timeout=20, _envvar={}, _shell=True):
     _newenv = os.environ.copy()
     for key in _envvar:
         os.environ[key] = _envvar[key]
     _start = time.time()
-    cmd = _exec.strip().split(' ')
-    p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, env=_newenv)
+    # cmd = shlex.split(_exec)
+    p = Popen(_exec, stdin=PIPE, stdout=PIPE, stderr=PIPE, env=_newenv, shell=_shell)
     setNonBlocking(p.stdout)
     setNonBlocking(p.stderr)
 
     if _input != '':                    ###DANGER: IGNOREING writes if nothing provided!!!
-        if str(type(_input)) != "<type 'list'>":
+        if not isinstance(_input, list):
             _input = [_input]
         _input.append('\n\n\n\n')       ###DANGER: this could be bad..
         for line in _input:
             p.stdin.write(line+'\n')    ###DANGER: that \n could be bad...
     signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(_timeout)                     ###HOW MUCH TIME TO GIVE THEM TO RUN THEIR PROGRAM####
+    signal.alarm(_timeout)              ###HOW MUCH TIME TO GIVE THEM TO RUN THEIR PROGRAM####
     stdout = ''
     stderr = 'inf'
     try:
-        #stdout, stderr = p.communicate(_input)
         stdout, stderr = p.communicate()
         signal.alarm(0)
         _return_code = p.returncode
@@ -72,7 +72,7 @@ def run(_exec, _input, _timeout=20, _envvar={}):
             stdout = stdout + p.stdout.read()
             stdout = stdout + 'Infinite loop or program did not exit'
         except Exception as e:
-            #print '      SECOND FAILURE '+str(e)
+            print('      SECOND FAILURE '+str(e))
             stdout = stdout + 'Infinite loop or program did not exit'
         if 1:  ## For future expandability, kill children...
             pids.extend(get_process_children(p.pid))
@@ -84,3 +84,11 @@ def run(_exec, _input, _timeout=20, _envvar={}):
     os.environ = _newenv
     _etime = time.time() - _start
     return stdout, stderr, _return_code, _etime
+
+
+##########################################
+###  References                        ###
+##########################################
+#http://stackoverflow.com/questions/1191374/subprocess-with-timeout
+#http://thraxil.org/users/anders/posts/2008/03/13/Subprocess-Hanging-PIPE-is-your-enemy/
+#http://stackoverflow.com/questions/19880190/interactive-input-output-using-python
