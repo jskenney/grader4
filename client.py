@@ -6,6 +6,8 @@
 API = 'http://mm.cs.usna.edu/api'
 KEY = 'test-api-key'
 DEBUG = False
+DEBUG_SHOW_TESTCASE = True
+#DEBUG = True
 
 # Submit System Grader Version 3.0
 # This is the client, and will handle the grading and
@@ -82,8 +84,9 @@ submission_list = post_api_json(API+'/submission/next', post)
 
 # Verify that there are results to work with
 if 'results' not in submission_list or len(submission_list['results']) < 1:
-    print('GraderV3 - Nothing to Process - Existing.')
+    print('GraderV3 - Nothing to Process - Exiting.')
     sys.exit(2)
+print('GraderV3 - Processing next submission')
 
 # Work with a specific submission
 submission = submission_list['results'][0]
@@ -150,8 +153,8 @@ debugPrint(DEBUG, '')
 if testcase['analysis_target'] != '':
     post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'init analysis', 'lint':LINT})
     cmd = 'make '+testcase['analysis_target']
-    print('Beginning ANALYSIS step ['+submission['course']+'] ['+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
-    stdout, stderr, return_code, etime = runner.run(cmd, '', 20)
+    print('Beginning ANALYSIS step ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
+    stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
     debugPrint(DEBUG, '-ANALYSIS-----------STDOUT-----------')
     debugPrint(DEBUG, stdout)
     debugPrint(DEBUG, '')
@@ -163,11 +166,12 @@ if testcase['analysis_target'] != '':
 ##############################################################################
 # Makefile Compile Step
 compiled = True
+print('Working with: http://submit.cs.usna.edu/review/review_submission.php?submission='+submission['UUID'])
 if testcase['compile_target'] != '':
     post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'init compile', 'lint':LINT})
     cmd = 'make '+testcase['compile_target']
-    print('Beginning COMPILE step  ['+submission['course']+'] ['+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
-    stdout, stderr, return_code, etime = runner.run(cmd, '', 20)
+    print('Beginning COMPILE step  ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
+    stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
     debugPrint(DEBUG, '-COMPILE-----------STDOUT-----------')
     debugPrint(DEBUG, stdout)
     debugPrint(DEBUG, '')
@@ -186,8 +190,8 @@ if compiled:
     if testcase['run_target'] != '':
         post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'init run', 'lint':LINT})
         cmd = 'make '+testcase['run_target']
-        print( 'Beginning RUN step      ['+submission['course']+'] ['+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
-        stdout, stderr, return_code, etime = runner.run(cmd, testcase['stdin'], 20)
+        print( 'Beginning RUN step      ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
+        stdout, stderr, return_code, etime = runner.run(cmd, testcase['stdin'], testcase['infinite'])
         debugPrint(DEBUG, '-RUN-----------STDOUT-----------')
         debugPrint(DEBUG, stdout)
         debugPrint(DEBUG, '')
@@ -197,7 +201,7 @@ if compiled:
 
     ##############################################################################
     # Analysis of Results and return values to database for test run.
-    final = check.test(testcase['stdin'], testcase['source'], testcase['sourcefile'], testcase['cond'], testcase['outvalue'], stdout, stderr, return_code, etime, return_code == 9999)
+    final = check.test(testcase['stdin'], testcase['source'], testcase['sourcefile'], testcase['cond'], testcase['outvalue'], stdout, stderr, return_code, etime, return_code == 9999, DEBUG_SHOW_TESTCASE)
 else:
     print('*-*-COMPILE-FAIL-ABORT-RUN-*-*')
 
@@ -214,6 +218,9 @@ else:
     final = '0'
 post_api_json(API+'/results/run', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'returnval':return_code, 'stime':etime, 'stdout':stdout, 'stderr':stderr, 'sourcefile':sourcefile, 'pass':final})
 
+# DEBUG
+#x = input(stordir)
+
 ##############################################################################
 # Destroy the main temporary Directory
 post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'destroying local test environment', 'lint':LINT})
@@ -222,3 +229,5 @@ stordir.cleanup()
 
 # Remove claim on this submission via the API
 post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'done'})
+
+print('')

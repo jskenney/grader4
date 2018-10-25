@@ -12,7 +12,7 @@ sys.dont_write_bytecode = True
 #  cond: 'compiles', 'is exactly', 'whitespace', 'has', 'does not have', 'exists', 'is true', 'is false'
 #        'greater than', 'less than', 'greater or equal', 'less or equal'
 # Check the results and see if the test was successful
-def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, stime, infinite):
+def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, stime, infinite, debug=True):
 
     # set default check variables
     chk_student = stdout
@@ -44,6 +44,14 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
     if not isinstance(chk_testcase, bytes):
         chk_testcase = bytes(chk_testcase, 'utf-8')
 
+    # Print debugging information if requested
+    if debug:
+        print ('*********** Test Case Conditions *************')
+        print ('This test case checks to see if the ['+source+'] ['+cond+']')
+        print ('Expected: '+str(chk_testcase))
+        print ('Received: '+str(chk_student))
+        print ('**********************************************')
+        
     # check to see if this is the simple "compiles" case
     if cond == 'compiles':
         return True
