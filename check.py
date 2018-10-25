@@ -42,7 +42,6 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
     if not isinstance(chk_student, bytes):
         chk_student = bytes(chk_student, 'utf-8')
     if not isinstance(chk_testcase, bytes):
-        print(type(chk_testcase))
         chk_testcase = bytes(chk_testcase, 'utf-8')
 
     # check to see if this is the simple "compiles" case
@@ -81,8 +80,8 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
 
     # numeric <, <=, >, >=
     try:
-        chk_student = eval(chk_student)
-        chk_testcase = eval(chk_testcase)
+        chk_student = float(chk_student)
+        chk_testcase = float(chk_testcase)
     except:
         return False
 
