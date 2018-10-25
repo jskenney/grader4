@@ -55,7 +55,7 @@ def run(_exec, _input, _timeout=20, _envvar={}, _shell=True):
     setNonBlocking(p.stdout)
     setNonBlocking(p.stderr)
 
-    if _input != '':
+    if _input != '' and _input is not None:
         if not isinstance(_input, list):
             _input = [_input]
         _input.append('\n\n\n\n')       ###DANGER: this could be bad..
