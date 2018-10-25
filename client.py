@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+#while [ $? -ne 2 ]; do ./client.py ; done
 #x = input('foo')
 
 # Submit Server Information

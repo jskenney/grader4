@@ -1,6 +1,6 @@
 FROM ubuntu
 
-MAINTAINER Jacob Pavlock
+MAINTAINER Jeff Kenney
 
 RUN apt-get update \
  && apt-get install -y \
