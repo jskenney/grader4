@@ -13,7 +13,7 @@ import sys
 sys.dont_write_bytecode = True
 
 # Load Primary Libraries
-import os, string, time, fcntl #, shlex
+import os, string, time, fcntl
 
 # Load in Subprocess (used to run external programs)
 from subprocess import Popen, PIPE, STDOUT
@@ -42,23 +42,29 @@ def get_process_children(pid):
 
 # This is the function that will run all external code
 def run(_exec, _input, _timeout=20, _envvar={}, _shell=True):
+    if not isinstance(_timeout, int):
+        try:
+            _timeout = int(_timeout)
+        except:
+            _timeout = 20
     _newenv = os.environ.copy()
     for key in _envvar:
         os.environ[key] = _envvar[key]
     _start = time.time()
-    # cmd = shlex.split(_exec)
     p = Popen(_exec, stdin=PIPE, stdout=PIPE, stderr=PIPE, env=_newenv, shell=_shell)
     setNonBlocking(p.stdout)
     setNonBlocking(p.stderr)
 
-    if _input != '':                    ###DANGER: IGNOREING writes if nothing provided!!!
+    if _input != '':
         if not isinstance(_input, list):
             _input = [_input]
         _input.append('\n\n\n\n')       ###DANGER: this could be bad..
         for line in _input:
-            p.stdin.write(line+'\n')    ###DANGER: that \n could be bad...
+            if not isinstance(line, bytes):
+                line = bytes(line, 'utf-8')
+            p.stdin.write(line)
     signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(_timeout)              ###HOW MUCH TIME TO GIVE THEM TO RUN THEIR PROGRAM####
+    signal.alarm(_timeout)
     stdout = ''
     stderr = 'inf'
     try:
@@ -72,10 +78,8 @@ def run(_exec, _input, _timeout=20, _envvar={}, _shell=True):
             stdout = stdout + p.stdout.read()
             stdout = stdout + 'Infinite loop or program did not exit'
         except Exception as e:
-            print('      SECOND FAILURE '+str(e))
             stdout = stdout + 'Infinite loop or program did not exit'
-        if 1:  ## For future expandability, kill children...
-            pids.extend(get_process_children(p.pid))
+        pids.extend(get_process_children(p.pid))
         for pid in pids:
             try:
                 os.kill(pid, signal.SIGKILL)
