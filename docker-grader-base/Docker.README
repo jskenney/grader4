@@ -1,0 +1,73 @@
+1. First you need to create the base image which will contain all the programming languages so they don't need to be installed each time we create a new container. All containers will be based off of this image.
+
+Create an empty directory called "docker_base"
+$ mkdir docker_base
+
+and create a file called "Dockerfile" containing the following contents:
+$ cd docker_base
+$ vim Dockerfile
+
+FROM ubuntu
+
+MAINTAINER Jacob Pavlock
+
+RUN apt-get update \
+ && apt-get install -y \
+        build-essential \
+        python \
+        python3 \
+        default-jdk \
+        g++ \
+        gcc \
+ && apt-get clean
+
+if you need any other programs for your containers, simply add them to the apt-get install command
+
+Before we can build the container, we need to configure our dns settings because the Naval Academy is weird
+# vim /etc/docker/daemon.json
+
+and copy the following contents
+
+{                                                                          
+    "dns": ["10.1.74.10"]
+}
+
+
+### GO INTO THE BASE DIR
+
+Next we will create the base image
+# sudo docker build -t cs-base .
+
+this may take a while to install all the programs
+
+2. Second is testing out an app with the base image
+Create another directory called app and add a sample program and makefile (does not matter as long as we can run the command, make)
+$ cd ..
+$ mkdir app
+$ vim hello_world.py
+$ vim makefile
+
+Now we need to add another Dockerfile
+$ vim Dockerfile
+
+and add the following contents
+
+FROM cs-base
+
+MAINTAINER Jacob Pavlock
+
+COPY . /app
+
+WORKDIR /app
+
+CMD ["make", "-s"]
+
+
+This tells docker to use the base image we created earlier, copy all current files in our directory into our container, switch to our app directory in the container, and run make in silent mode which will run our program.
+
+Finally, in order to build and run our program, simply run 
+# docker run --rm $(docker build -q .)
+
+this will tell docker to quietly build the image, and remove it once it is finished running.
+
+

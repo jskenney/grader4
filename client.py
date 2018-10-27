@@ -4,11 +4,7 @@
 #x = input('foo')
 
 # Submit Server Information
-API = 'http://mm.cs.usna.edu/api'
-KEY = 'test-api-key'
-DEBUG = False
-DEBUG_SHOW_TESTCASE = True
-#DEBUG = True
+from config import *
 
 # Submit System Grader Version 3.0
 # This is the client, and will handle the grading and
@@ -26,7 +22,7 @@ if sys.version_info.major != 3:
     print('This requires Python 3')
     sys.exit(2)
 sys.dont_write_bytecode = True
-import os, re, platform, time, json, uuid, tempfile, shutil
+import os, re, platform, time, json, uuid, tempfile, shutil, platform
 import runner
 import check
 try:
@@ -78,16 +74,17 @@ LINT = ''
 # Retrieve submissions waiting to be processed, if a submissionID (sid)
 # was provided as part of the command line, submit that to the system
 # for processing.
-post = {'apikey':KEY}
+print('GraderV3')
 if len(sys.argv) > 1:
     post['sid'] = sys.argv[-1]
-submission_list = post_api_json(API+'/submission/next', post)
+submission_list = post_api_json(API+'/submission/claim', {'apikey':KEY})
 
 # Verify that there are results to work with
 if 'results' not in submission_list or len(submission_list['results']) < 1:
     print('GraderV3 - Nothing to Process - Exiting.')
     sys.exit(2)
-print('GraderV3 - Processing next submission')
+DOCKER = platform.node()
+print('GraderV3 - Processing next submission - '+DOCKER)
 
 # Work with a specific submission
 submission = submission_list['results'][0]
@@ -97,7 +94,7 @@ debugPrint(DEBUG, dict_to_string_table(submission))
 LINT += 'SUBMISSION:\n' + dict_to_string_table(submission) + '\n'
 
 # Claim this submission via the API
-post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'retrieving project information', 'lint':LINT})
+post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'setup', 'process':DOCKER, 'lint':LINT})
 
 # Create a Temporary Directory to work with
 origdir = os.getcwd()
@@ -106,7 +103,7 @@ os.chdir(stordir.name)
 
 ##############################################################################
 # Retrieve project information
-project = post_api_json(API+'/project/list', {'apikey':KEY, 'course':submission['course'], 'project':submission['project'], 'lint':LINT})
+project = post_api_json(API+'/project/list', {'apikey':KEY, 'course':submission['course'], 'project':submission['project'], 'process':DOCKER, 'lint':LINT})
 project = project['results'][0]
 LINT += 'PROJECT:\n' + dict_to_string_table(project) + '\n'
 
@@ -114,14 +111,14 @@ debugPrint(DEBUG, 'PROJECT:')
 debugPrint(DEBUG, dict_to_string_table(project))
 
 # Retrieve test case information
-testcases = post_api_json(API+'/testcase/list', {'apikey':KEY, 'course':submission['course'], 'project':submission['project'], 'lint':LINT})
+testcases = post_api_json(API+'/testcase/list', {'apikey':KEY, 'course':submission['course'], 'project':submission['project'], 'process':DOCKER, 'lint':LINT})
 testcase = []
 for test in testcases['results']:
     if test['tid'] == submission['tid']:
         testcase = test
 if testcase == []:
     debugPrint(DEBUG, 'testcase failure - testcase missing...')
-    post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'system failure - testcase removed?', 'lint':LINT})
+    post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'system failure - testcase removed?', 'process':DOCKER, 'lint':LINT})
     sys.exit()
 
 LINT += 'TESTCASE:\n' + dict_to_string_table(testcase)+ '\n'
@@ -131,18 +128,17 @@ debugPrint(DEBUG, dict_to_string_table(testcase))
 ##############################################################################
 # Start Downloading the Submission with TestFiles
 debugPrint(DEBUG, 'Downloading Submission')
-post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'downloading submission', 'lint':LINT})
+post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'downloading', 'process':DOCKER, 'lint':LINT})
 post_api_file(API+'/submission/pull', '.student.code.tgz', {'apikey':KEY, 'course':submission['course'], 'project':submission['project'], 'sid':submission['sid']})
 
 ##############################################################################
 # Build Local Test Environment
 debugPrint(DEBUG, 'Extracting Submission')
-post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'extracting submission files', 'lint':LINT})
+post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'extracting', 'process':DOCKER, 'lint':LINT})
 cmd = 'tar -xvpf .student.code.tgz'
 stdout, stderr, return_code, etime = runner.run(cmd, '')
 os.remove('.student.code.tgz')
 LINT += 'extraction:\n' + str(stdout) + '\nERROR:' + str(stderr) + '\n'
-post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'extracting submission files - complete', 'lint':LINT})
 
 debugPrint(DEBUG, 'File Listing:')
 for item in os.listdir('.'):
@@ -152,7 +148,7 @@ debugPrint(DEBUG, '')
 ##############################################################################
 # Makefile Lint Step
 if testcase['analysis_target'] != '':
-    post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'init analysis', 'lint':LINT})
+    post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'analysis', 'process':DOCKER, 'lint':LINT})
     cmd = 'make '+testcase['analysis_target']
     print('Beginning ANALYSIS step ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
     stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
@@ -169,7 +165,7 @@ if testcase['analysis_target'] != '':
 compiled = True
 print('Working with: http://submit.cs.usna.edu/review/review_submission.php?submission='+submission['UUID'])
 if testcase['compile_target'] != '':
-    post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'init compile', 'lint':LINT})
+    post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'compiling', 'process':DOCKER, 'lint':LINT})
     cmd = 'make '+testcase['compile_target']
     print('Beginning COMPILE step  ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
     stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
@@ -189,7 +185,7 @@ final = False
 if compiled:
     stdout, stderr, return_code, etime = b'', b'', 8888, -1.0
     if testcase['run_target'] != '':
-        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'init run', 'lint':LINT})
+        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'running', 'process':DOCKER, 'lint':LINT})
         cmd = 'make '+testcase['run_target']
         print( 'Beginning RUN step      ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
         stdout, stderr, return_code, etime = runner.run(cmd, testcase['stdin'], testcase['infinite'])
@@ -224,7 +220,7 @@ post_api_json(API+'/results/run', {'apikey':KEY, 'sid':submission['sid'], 'tid':
 
 ##############################################################################
 # Destroy the main temporary Directory
-post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'destroying local test environment', 'lint':LINT})
+post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'status':'destroy', 'process':DOCKER, 'lint':LINT})
 os.chdir(origdir)
 stordir.cleanup()
 

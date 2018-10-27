@@ -1,0 +1,5 @@
+virtualenv
+lxml
+pycrypto
+pycryptodome
+requests
