@@ -1,3 +1,0 @@
-To use the grader, run python grader.py
-
-for docker, the docker instance should actually have the entire grader inside of it, this instance should then make the appropriate calls to get a task to run?

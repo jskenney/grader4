@@ -1,9 +1,0 @@
-FROM cs-base
-
-MAINTAINER Jacob Pavlock
-
-COPY . /app
-
-WORKDIR /app
-
-CMD echo "input" | make -s
