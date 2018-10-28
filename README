@@ -1,0 +1,50 @@
+The following directions will help prepare a machine to be used as
+a client to the submission system (version 4+).
+
+Step 1, ensure that required python3 libraries are installed.
+
+pip3 install requests
+
+Step 2, configure config.py with the api location and your api key
+
+Step 3, ensure stand alone client can connect to the server and run code
+
+python3 client.py
+
+-------------------------------------------------------------------------
+For the docker server, continue with:
+
+Step 4, install docker
+
+sudo apt install docker.io
+
+Step 5, set your user as part of the docker group
+
+sudo usermod -aG docker username
+
+Step 6, logout or reboot
+
+Step 7, install docker lib for python3
+
+pip3 install docker-py
+
+Step 8, Configure DNS for docker, edit /etc/docker/daemon.json
+and copy the following contents
+
+{
+    "dns": ["10.1.74.10"]
+}
+
+Step 9, builder base docker image
+
+cd docker-grader-base
+docker build -t cs-base .
+
+Step 10, configure number of running instances in config.py
+
+Step 11, run as Server
+
+python3 server.py
+
+NOTE: you can test the docker instance directly via
+docker run --rm $(docker build -q .)
