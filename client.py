@@ -78,6 +78,7 @@ print('GraderV3')
 if len(sys.argv) > 1:
     post['sid'] = sys.argv[-1]
 submission_list = post_api_json(API+'/submission/claim', {'apikey':KEY})
+print(submission_list)
 
 # Verify that there are results to work with
 if 'results' not in submission_list or len(submission_list['results']) < 1:
@@ -87,7 +88,7 @@ DOCKER = platform.node()
 print('GraderV3 - Processing next submission - '+DOCKER)
 
 # Work with a specific submission
-submission = submission_list['results'][0]
+submission = submission_list['results']
 debugPrint(DEBUG, 'SUBMISSION:')
 debugPrint(DEBUG, dict_to_string_table(submission))
 
