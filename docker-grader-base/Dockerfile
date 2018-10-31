@@ -25,20 +25,124 @@ MAINTAINER Jeff Kenney
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install any required Ubuntu Packages
-RUN apt-get update
-RUN apt-get -y install build-essential pkg-config libc6-dev libssl-dev libexpat1-dev yasm bison gdb autoconf automake cmake flex bison expat expect g++ ncurses-dev clang libreadline-dev libc++-dev valgrind libbsd-dev imagemagick enscript gnuplot libtool libedit-dev libbsd-dev libgmp3-dev zlib1g-dev libacl1-dev perl
-RUN apt-get -y install python2.7-dev python3-dev python-setuptools python3-setuptools python-pip python3-pip python-dev python-nltk python-ply python-pyorbit python-telepathy python-vte python-numpy python-scipy python-matplotlib cython
-RUN apt-get -y install curl unzip zip unrar tofrodos
-RUN apt-get -y install g++ ncurses-dev gdb build-essential enscript gnuplot clang
-RUN apt-get -y install openjdk-11-jre javahelp2
-RUN apt-get -y install g++ ncurses-dev gdb build-essential enscript gnuplot clang racket gfortran nasm cython erlang gforth golang ghc ant ant-optional clisp clojure1.8 lua5.3 gobjc ruby jruby scala rustc rust-gdb
-RUN apt-get -y install beef libicu-dev elixir coq coq-doc coq-theories gprolog gprolog-doc tk clang rustc rust-doc libpng-dev mono-complete haskell-platform haskell-platform-doc tcl ruby scala scala-doc gnat-8 gnat-8-doc gforth gfortran gfortran-doc
-RUN apt-get -y install maven ant git emacs
-RUN apt-get -y install libacl1-dev curl
-RUN apt-get -y install graphviz
-RUN apt-get -y install python3-lxml python-lxml
-RUN apt-get -y install python-openssl python3-openssl
-RUN apt-get clean
+#   mono-complete \
+#   mono-devel \
+#coq \
+#coq-theories \
+#  beef \
+#  clojure1.8 \
+#   elixir \
+#gtk-sharp2 \
+#erlang \
+#gforth \
+#gfortran \
+#ghc \
+#gnat-8 \
+#gobjc \
+#golang \
+#gprolog \
+#graphviz \
+#haskell-platform \
+#javahelp2 \
+#jruby \
+#libavcodec-dev \
+#libcanberra-gtk-module \
+#libgl1-mesa-dev \
+#libqt4-dev \
+#lua5.3 \
+#maven \
+#mpi \
+#mpich \
+#mysql-client-5.7 \
+#php \
+#php-mysqlnd \
+#php7.2-cli \
+#php7.2-sqlite3 \
+#racket \
+#ruby \
+#rust-gdb \
+#rustc \
+#scala \
+#scamper \
+#scapy \
+#socat \
+#sqlite3 \
+#traceroute \
+#libmpich-dev \
+#libmpich12 \
+#ant \
+#ant-optional \
+#  enscript \
+#  gdb \
+#libsqlite3-dev \
+#valgrind \
+#  libacl1-dev \
+#  libfdk-aac-dev \
+#  python-pyorbit \
+#python3-mysql.connector \
+#python3-mysqldb \
+#python-mysql.connector \
+#python-mysqldb \
+#  python-telepathy \
+#  python-vte \
+#  git \
+#  gnuplot \
+#  imagemagick \
+
+RUN apt-get update && apt-get -y install autoconf \
+  automake \
+  bison \
+  build-essential \
+  clang \
+  clisp \
+  cmake \
+  curl \
+  cython \
+  expat \
+  expect \
+  flex \
+  g++ \
+  gcc-multilib \
+  libbsd-dev \
+  libc++-dev \
+  libc6-dev \
+  libedit-dev \
+  libexpat1-dev \
+  libgmp3-dev \
+  libicu-dev \
+  liblzo2-dev \
+  libpng-dev \
+  libreadline-dev \
+  libssl-dev \
+  libtool \
+  nasm \
+  ncurses-dev \
+  default-jre \
+  perl \
+  pkg-config \
+  python-dev \
+  python-lxml \
+  python-matplotlib \
+  python-nltk \
+  python-numpy \
+  python-openssl \
+  python-pip \
+  python-ply \
+  python-scipy \
+  python-setuptools \
+  python2.7-dev \
+  python3-dev \
+  python3-lxml \
+  python3-openssl \
+  python3-pip \
+  python3-setuptools \
+  tofrodos \
+  unrar \
+  unzip \
+  yasm \
+  zip \
+  zlib1g-dev \
+&& rm -rf /var/lib/apt/lists/*
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r Docker.python
