@@ -68,7 +68,7 @@ while True:
     submission_list = post_api_json(API+'/submission/next', {'apikey':KEY})
 
     print('\x1b[2J')
-    print('Available Submission/Tests to process = '+str(len(submission_list['results'])))
+    print('Available Submission/Tests to process = '+str(len(submission_list['results']))+' (estimated)')
 
     # For some reason this gets confused every now and then...
     try:
