@@ -59,7 +59,7 @@ while True:
                 pass
 
     # Sleep for just a bit
-    time.sleep(0.01)
+    time.sleep(1.0)
 
     ##############################################################################
     # Retrieve submissions waiting to be processed, if a submissionID (sid)
@@ -67,6 +67,7 @@ while True:
     # for processing.
     submission_list = post_api_json(API+'/submission/next', {'apikey':KEY})
 
+    print('\x1b[2J')
     print('Available Submission/Tests to process = '+str(len(submission_list['results'])))
 
     # For some reason this gets confused every now and then...
@@ -83,10 +84,14 @@ while True:
             if id not in container_list:
                 container_list[id] = time.time()
             new_list[id] = container_list[id]
-            print("  Running Container: ",id)
+
+            if id in running_list_search:
+                print("           Container:",id,running_list_search[id]['course'],running_list_search[id]['project'],running_list_search[id]['user'],running_list_search[id]['rulename'],int(time.time()-container_list[id]))
+            else:
+                print("           Container:",id,int(time.time()-container_list[id]))
             if time.time()-container_list[id] > KILL_AFTER or id in kill_list:
                 try:
-                    print('  --- killing')
+                    print("  -Killing Container:",id)
                     c.kill()
                     if id in running_list_search:
                         post_api_json(API+'/results/status', {'apikey':KEY, 'sid':running_list_search[id]['sid'], 'status':'done'})
