@@ -48,3 +48,8 @@ python3 server.py
 
 NOTE: you can test the docker instance directly via
 docker run --rm $(docker build -q .)
+
+NOTE: if you want to delete all docker containers and images do:
+docker rm $(docker ps -a -q)
+docker rmi $(docker images -q)
+
