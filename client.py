@@ -214,10 +214,15 @@ if final:
 else:
     print('*-*-*-*-*-*-*FAIL*-*-*-*-*-*-*')
     final = '0'
-post_api_json(API+'/results/run', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'returnval':return_code, 'stime':etime, 'stdout':stdout, 'stderr':stderr, 'sourcefile':sourcefile, 'pass':final})
+data = post_api_json(API+'/results/run', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'returnval':return_code, 'stime':etime, 'stdout':stdout, 'stderr':stderr, 'sourcefile':sourcefile, 'pass':final})
 
-# DEBUG
-#x = input(stordir)
+##############################################################################
+# DEBUG - Final Debuggign Opportunity
+debugPrint(DEBUG, 'STORAGE:')
+debugPrint(DEBUG, stordir.name)
+debugPrint(DEBUG, '')
+print(str([data]))
+x = input('Press Enter to Continue...')
 
 ##############################################################################
 # Destroy the main temporary Directory
