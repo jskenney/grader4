@@ -87,8 +87,15 @@ def run(_exec, _input, _timeout=20, _envvar={}, _shell=True):
                 pass
     os.environ = _newenv
     _etime = time.time() - _start
+    try:
+        stdout = stdout.decode('unicode_escape')
+    except AttributeError:
+        pass
+    try:
+        stderr = stderr.decode('unicode_escape')
+    except AttributeError:
+        pass
     return stdout, stderr, _return_code, _etime
-
 
 ##########################################
 ###  References                        ###
