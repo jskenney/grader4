@@ -26,7 +26,7 @@ Step 6, logout or reboot
 
 Step 7, install docker lib for python3
 
-pip3 install docker-py
+pip3 install docker
 
 Step 8, Configure DNS for docker, edit /etc/docker/daemon.json
 and copy the following contents
@@ -52,4 +52,3 @@ docker run --rm $(docker build -q .)
 NOTE: if you want to delete all docker containers and images do:
 docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
-
