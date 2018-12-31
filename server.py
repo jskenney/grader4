@@ -9,7 +9,7 @@ if sys.version_info.major != 3:
     print('This requires Python 3')
     sys.exit(2)
 sys.dont_write_bytecode = True
-import os, re, platform, time, json, uuid, tempfile, shutil, platform
+import os, re, platform, time, json, uuid, tempfile, shutil
 import runner
 import check
 try:
@@ -94,7 +94,7 @@ while True:
                     print("  -Killing Container:",id)
                     c.kill()
                     if id in running_list_search:
-                        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':running_list_search[id]['sid'], 'status':'done'})
+                        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':running_list_search[id]['sid'], 'tid':running_list_search[id]['tid'], 'status':'done'})
                         post_api_json(API+'/results/run',    {'apikey':KEY, 'sid':running_list_search[id]['sid'], 'tid':running_list_search[id]['tid'], 'returnval':'7777', 'stime':'7777', 'stdout':'', 'stderr':'', 'sourcefile':'', 'pass':'0'})
                 except:
                     pass
