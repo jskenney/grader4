@@ -152,21 +152,6 @@ try:
     debugPrint(DEBUG, '')
 
     ##############################################################################
-    # Makefile Lint Step
-    if testcase['analysis_target'] != '':
-        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'analysis', 'process':DOCKER, 'lint':LINT})
-        cmd = 'make '+testcase['analysis_target']
-        print('Beginning ANALYSIS step ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
-        stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
-        debugPrint(DEBUG, '-ANALYSIS-----------STDOUT-----------')
-        debugPrint(DEBUG, stdout)
-        debugPrint(DEBUG, '')
-        debugPrint(DEBUG, '-ANALYSIS-----------STDERR-----------')
-        debugPrint(DEBUG, stderr)
-        debugPrint(DEBUG, '')
-        post_api_json(API+'/results/analysis', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'returnval':return_code, 'stime':etime, 'stdout':stdout, 'stderr':stderr})
-
-    ##############################################################################
     # Makefile Compile Step
     compiled = True
     print('Working with: http://submit.cs.usna.edu/review/review_submission.php?submission='+submission['UUID'])
@@ -184,7 +169,21 @@ try:
         if return_code != 0:
             compiled = False
         post_api_json(API+'/results/compile', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'returnval':return_code, 'stime':etime, 'stdout':stdout, 'stderr':stderr})
-        # post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'compiling-complete', 'process':DOCKER, 'lint':LINT})
+
+    ##############################################################################
+    # Makefile Lint Step
+    if testcase['analysis_target'] != '':
+        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'analysis', 'process':DOCKER, 'lint':LINT})
+        cmd = 'make '+testcase['analysis_target']
+        print('Beginning ANALYSIS step ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
+        stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
+        debugPrint(DEBUG, '-ANALYSIS-----------STDOUT-----------')
+        debugPrint(DEBUG, stdout)
+        debugPrint(DEBUG, '')
+        debugPrint(DEBUG, '-ANALYSIS-----------STDERR-----------')
+        debugPrint(DEBUG, stderr)
+        debugPrint(DEBUG, '')
+        post_api_json(API+'/results/analysis', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'returnval':return_code, 'stime':etime, 'stdout':stdout, 'stderr':stderr})
 
     ##############################################################################
     # Makefile Run Step
