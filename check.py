@@ -52,11 +52,15 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
     # delete whitespace and then do the comparision as 'is exactly'
     if cond == 'whitespace':
         cond = 'is exactly'
+        if isinstance(chk_student, bool) or isinstance(chk_student, int) or isinstance(chk_student, float):
+            chk_student = str(chk_student)
         chk_student = chk_student.replace(u'\n', u'').replace(u'\t', u'').replace(u' ', u'')
         chk_testcase = chk_testcase.replace(u'\n', u'').replace(u'\t', u'').replace(u' ', u'')
 
     # check for equality
     if cond == 'is exactly':
+        if isinstance(chk_student, bool) or isinstance(chk_student, int) or isinstance(chk_student, float):
+            chk_student = str(chk_student)
         return chk_student.strip().replace(u'\r', u'') == chk_testcase.strip().replace(u'\r', u''), diff_student
 
     # check via the various conditions
