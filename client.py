@@ -189,6 +189,7 @@ try:
     # Makefile Run Step
     final = False
     diffval = ''
+    stdout, stderr, return_code, etime = u'', u'', 9000, -1.0
     if compiled:
         stdout, stderr, return_code, etime = u'', u'', 8888, -1.0
         if testcase['run_target'] != '':
