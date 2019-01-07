@@ -117,7 +117,7 @@ while True:
             print("  Starting Container:",con.short_id)
 
     else:
-        time.sleep(1.0)
+        time.sleep(DELAYCHECK)
 
 # Wait for system to finish...
 while(len(client.containers.list()) > 0):
