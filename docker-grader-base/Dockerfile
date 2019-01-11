@@ -142,6 +142,7 @@ RUN apt-get update && apt-get -y install autoconf \
   yasm \
   zip \
   zlib1g-dev \
+  openjdk-11-jdk \
 && rm -rf /var/lib/apt/lists/*
 
 # Install any needed packages specified in requirements.txt
