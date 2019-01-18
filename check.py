@@ -45,7 +45,7 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
     diff_student = chk_student
 
     # check to see if this is the simple "compiles" case
-    if cond == 'compiles':
+    if cond == 'compiles' or cond == 'manual review as html':
         return True, diff_student
 
     # if condition is 'whitespace' which ignores whitespace,
