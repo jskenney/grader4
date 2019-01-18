@@ -130,7 +130,11 @@ RUN apt-get update && apt-get -y install autoconf \
   python-ply \
   python-scipy \
   python-setuptools \
+  python-mysqldb \
+  python-mysql.connector \
   python2.7-dev \
+  python3-mysqldb \
+  python3-mysql.connector \
   python3-dev \
   python3-lxml \
   python3-openssl \
