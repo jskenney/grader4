@@ -157,7 +157,10 @@ try:
     print('Working with: http://submit.cs.usna.edu/review/review_submission.php?submission='+submission['UUID'])
     if testcase['compile_target'] != '':
         post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'compiling', 'process':DOCKER, 'lint':LINT})
-        cmd = 'make -f ' + testcase['makefile'] + ' ' + testcase['compile_target']
+        if testcase['makefile'] != None and testcase['makefile'] != '':
+            cmd = 'make -f ' + testcase['makefile'] + ' ' + testcase['compile_target']
+        else:
+            cmd = 'make ' + testcase['compile_target']
         print('Beginning COMPILE step  ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
         stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
         debugPrint(DEBUG, '-COMPILE-----------STDOUT-----------')
@@ -174,7 +177,10 @@ try:
     # Makefile Lint Step
     if testcase['analysis_target'] != '':
         post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'analysis', 'process':DOCKER, 'lint':LINT})
-        cmd = 'make -f ' + testcase['makefile'] + ' ' + testcase['analysis_target']
+        if testcase['makefile'] != None and testcase['makefile'] != '':
+            cmd = 'make -f ' + testcase['makefile'] + ' ' + testcase['analysis_target']
+        else:
+            cmd = 'make ' + testcase['analysis_target']
         print('Beginning ANALYSIS step ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
         stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
         debugPrint(DEBUG, '-ANALYSIS-----------STDOUT-----------')
@@ -194,7 +200,10 @@ try:
         stdout, stderr, return_code, etime = u'', u'', 8888, -1.0
         if testcase['run_target'] != '':
             post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'running', 'process':DOCKER, 'lint':LINT})
-            cmd = 'make -f ' + testcase['makefile'] + ' ' + testcase['run_target']
+            if testcase['makefile'] != None and testcase['makefile'] != '':
+                cmd = 'make -f ' + testcase['makefile'] + ' ' + testcase['run_target']
+            else:
+                cmd = 'make ' + testcase['run_target']
             print( 'Beginning RUN step      ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
             stdout, stderr, return_code, etime = runner.run(cmd, testcase['stdin'], testcase['infinite'])
             debugPrint(DEBUG, '-RUN-----------STDOUT-----------')
