@@ -95,7 +95,6 @@ try:
     else:
         submission_list = post_api_json(API+'/submission/claim', {'apikey':KEY})
 
-
     # Verify that there are results to work with
     if 'results' not in submission_list or len(submission_list['results']) < 1:
         print('GraderV3 - Nothing to Process - Exiting.')

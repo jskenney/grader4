@@ -46,11 +46,15 @@ Step 11, run as Server
 
 python3 server.py
 
+NOTE: the permissions of these files must be readable by other users,
+the server will spawn these under a different user and if the permissions are
+of this user will not be able to run the client.
+
 NOTE: you can test the docker instance directly via
 docker run --rm $(docker build -q .)
 
 NOTE: you can test a specific user's work via
-docker run --rm $(docker build -q .) client-manual.py --course SI204 --project hw06 --user m210072 --rulename case1
+docker run --rm $(docker build -q .) client.py --course SI204 --project hw06 --user m210072 --rulename case1
 
 NOTE: if you want to delete all docker containers and images do:
 docker rm $(docker ps -a -q)
