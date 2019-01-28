@@ -87,7 +87,16 @@ try:
     parser.add_argument('--project', dest='project', metavar='PROJECT', default='%', nargs='?', help='select a specific project')
     parser.add_argument('--user', dest='user', metavar='USER', default='%', nargs='?', help='select a user to process')
     parser.add_argument('--rulename', dest='rulename', metavar='RULENAME', default='%', nargs='?', help='select a specific testcase to run')
+    parser.add_argument('--debug', dest='debug', metavar='DEBUGVALUE', default='%', nargs='?', help='set a specific delay to allow file system debugging')
     args = parser.parse_args()
+
+    # Change debugging level
+    if args.debug != '%':
+        DEBUG = True
+        try:
+            args.debug = int(args.debug)
+        except:
+            args.debug = '%'
 
     # Retrieve a specific project/user/test to process, override already completed if specificed manually
     if args.course != '%' and args.project != '%' and args.user != '%' and args.rulename != '%':
@@ -168,7 +177,7 @@ try:
     ##############################################################################
     # Makefile Compile Step
     compiled = True
-    print('Working with: http://submit.cs.usna.edu/review/review_submission.php?submission='+submission['UUID'])
+    print('Working with: http://submit.cs.usna.edu/site/review_submission.php?submission='+submission['UUID'])
     if testcase['compile_target'] != '':
         post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'compiling', 'process':DOCKER, 'lint':LINT})
         if testcase['makefile'] != None and testcase['makefile'] != '':
@@ -249,12 +258,13 @@ try:
     data = post_api_json(API+'/results/run', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'returnval':return_code, 'stime':etime, 'stdout':stdout, 'stderr':stderr, 'sourcefile':sourcefile, 'pass':final, 'diff':diffval})
 
     ##############################################################################
-    # DEBUG - Final Debuggign Opportunity
-    # debugPrint(DEBUG, 'STORAGE:')
-    # debugPrint(DEBUG, stordir.name)
-    # debugPrint(DEBUG, '')
-    # print(str([data]))
-    # x = input('Press Enter to Continue...')
+    # DEBUG - Final Debugging Opportunity
+    if DEBUG and args.debug != '%':
+        debugPrint(DEBUG, 'STORAGE:')
+        debugPrint(DEBUG, stordir.name)
+        debugPrint(DEBUG, '')
+        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'debug '+stordir.name, 'process':DOCKER, 'lint':LINT})
+        time.sleep(args.debug)
 
     ##############################################################################
     # Destroy the main temporary Directory
