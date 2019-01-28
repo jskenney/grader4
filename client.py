@@ -177,7 +177,7 @@ try:
     ##############################################################################
     # Makefile Compile Step
     compiled = True
-    print('Working with: http://submit.cs.usna.edu/site/review_submission.php?submission='+submission['UUID'])
+    print('Working with: http://submit.cs.usna.edu/site/receipt.php?submission='+submission['UUID'])
     if testcase['compile_target'] != '':
         post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'compiling', 'process':DOCKER, 'lint':LINT})
         if testcase['makefile'] != None and testcase['makefile'] != '':
