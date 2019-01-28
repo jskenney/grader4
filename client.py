@@ -25,7 +25,7 @@ if sys.version_info.major != 3:
     print('This requires Python 3')
     sys.exit(2)
 sys.dont_write_bytecode = True
-import os, re, platform, time, json, uuid, tempfile, shutil, traceback
+import os, re, platform, time, json, uuid, tempfile, shutil, traceback, argparse
 import runner
 import check
 try:
@@ -81,15 +81,30 @@ print('GraderV3')
 
 try:
 
-    if len(sys.argv) > 1:
-        post['sid'] = sys.argv[-1]
-    submission_list = post_api_json(API+'/submission/claim', {'apikey':KEY})
+    # Define Required Command Line Arguments
+    parser = argparse.ArgumentParser(description="Autograde an available job.")
+    parser.add_argument('--course', dest='course', metavar='COURSE', default='%', nargs='?', help='select a specific course')
+    parser.add_argument('--project', dest='project', metavar='PROJECT', default='%', nargs='?', help='select a specific project')
+    parser.add_argument('--user', dest='user', metavar='USER', default='%', nargs='?', help='select a user to process')
+    parser.add_argument('--rulename', dest='rulename', metavar='RULENAME', default='%', nargs='?', help='select a specific testcase to run')
+    args = parser.parse_args()
+
+    # Retrieve a specific project/user/test to process, override already completed if specificed manually
+    if args.course != '%' and args.project != '%' and args.user != '%' and args.rulename != '%':
+        submission_list = post_api_json(API+'/submission/verify', {'apikey':KEY, 'course': args.course, 'project': args.project, 'user':args.user, 'rulename':args.rulename})
+    else:
+        submission_list = post_api_json(API+'/submission/claim', {'apikey':KEY})
+
 
     # Verify that there are results to work with
     if 'results' not in submission_list or len(submission_list['results']) < 1:
         print('GraderV3 - Nothing to Process - Exiting.')
         sys.exit(2)
+
+    # Connect to the local docker server
     DOCKER = platform.node()
+
+    # Status
     print('GraderV3 - Processing next submission - '+DOCKER)
 
     # Work with a specific submission
