@@ -16,8 +16,9 @@ def debugPrint(tf, line):
     if tf:
         try:
             print(line)
-        except:
+        except Exception as e:
             print('--unable-to-print--')
+            print(e)
 
 # Load in required Libraries.
 import sys
