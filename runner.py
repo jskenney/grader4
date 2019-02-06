@@ -3,10 +3,11 @@
 # Submit System Grader Version 3.0
 # This library will handle running external programs
 
-# Runner Version 2.10
+# Runner Version 2.20
 # - .01 = environmental variable support
 # - .02 = branch through the children of a process id
 # - .10 = update to support python3
+# - .20 = attempt to fix unicode issues
 
 # Load in sys to prevent .pyc and cache files
 import sys
@@ -88,13 +89,19 @@ def run(_exec, _input, _timeout=20, _envvar={}, _shell=True):
     os.environ = _newenv
     _etime = time.time() - _start
     try:
-        stdout = stdout.decode('unicode_escape')
-    except AttributeError:
-        pass
+        stdout = stdout.decode('utf-8')
+    except:
+        try:
+            stdout = stdout.decode('unicode_escape')
+        except:
+            pass
     try:
-        stderr = stderr.decode('unicode_escape')
-    except AttributeError:
-        pass
+        stderr = stderr.decode('utf-8')
+    except:
+        try:
+            stderr = stderr.decode('unicode_escape')
+        except:
+            pass
     return stdout, stderr, _return_code, _etime
 
 ##########################################
