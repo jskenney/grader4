@@ -187,6 +187,10 @@ try:
             cmd = 'make ' + testcase['compile_target']
         print('Beginning COMPILE step  ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
         stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
+        if len(stdout) > MAX_SIZE:
+            stdout = stdout[:MAX_SIZE]
+        if len(stderr) > MAX_SIZE:
+            stderr = stderr[:MAX_SIZE]
         debugPrint(DEBUG, '-COMPILE-----------STDOUT-----------')
         debugPrint(DEBUG, stdout)
         debugPrint(DEBUG, '')
@@ -207,6 +211,10 @@ try:
             cmd = 'make ' + testcase['analysis_target']
         print('Beginning ANALYSIS step ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
         stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
+        if len(stdout) > MAX_SIZE:
+            stdout = stdout[:MAX_SIZE]
+        if len(stderr) > MAX_SIZE:
+            stderr = stderr[:MAX_SIZE]
         debugPrint(DEBUG, '-ANALYSIS-----------STDOUT-----------')
         debugPrint(DEBUG, stdout)
         debugPrint(DEBUG, '')
@@ -230,6 +238,10 @@ try:
                 cmd = 'make ' + testcase['run_target']
             print( 'Beginning RUN step      ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
             stdout, stderr, return_code, etime = runner.run(cmd, testcase['stdin'], testcase['infinite'])
+            if len(stdout) > MAX_SIZE:
+                stdout = stdout[:MAX_SIZE]
+            if len(stderr) > MAX_SIZE:
+                stderr = stderr[:MAX_SIZE]
             debugPrint(DEBUG, '-RUN-----------STDOUT-----------')
             debugPrint(DEBUG, stdout)
             debugPrint(DEBUG, '')
