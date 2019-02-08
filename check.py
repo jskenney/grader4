@@ -7,6 +7,8 @@
 import sys
 sys.dont_write_bytecode = True
 
+import re
+
 # Possible options for:
 #  source: 'Return Code', 'Infinite Loop', 'Student source code', 'Created File', 'Run time'
 #  cond: 'compiles', 'is exactly', 'whitespace', 'has', 'does not have', 'exists', 'is true', 'is false'
@@ -45,7 +47,7 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
     diff_student = chk_student
 
     # check to see if this is the simple "compiles" case
-    if cond == 'compiles' or cond == 'manual review as html':
+    if cond == 'compiles' or cond == 'manual review as html' or cond == 'manual review as text':
         return True, diff_student
 
     # if condition is 'whitespace' which ignores whitespace,
@@ -68,6 +70,8 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
         return chk_student.find(chk_testcase) != -1, diff_student
     if cond == 'does not have':
         return chk_student.find(chk_testcase) == -1, diff_student
+    if cond == 'regex':
+        return re.match(chk_testcase, chk_student), diff_student
 
     # Verify that results existed
     if cond == 'exists':
