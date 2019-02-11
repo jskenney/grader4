@@ -292,4 +292,7 @@ try:
 
 except Exception as ex:
     LINT = ''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__))
-    post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'crash', 'lint':LINT})
+    if LINT.find('Read timed out. (read timeout=99)') == -1:
+        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'crash', 'lint':LINT})
+    else:
+        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'done'})
