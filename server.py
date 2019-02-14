@@ -105,6 +105,7 @@ while True:
 
         # cleanup
         client.images.prune()
+        client.containers.prune()
 
         for build in range(INSTANCES-len(ccl)):
 
