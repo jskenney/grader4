@@ -147,6 +147,7 @@ RUN apt-get update && apt-get -y install autoconf \
   zip \
   zlib1g-dev \
   openjdk-11-jdk \
+  valgrind \
   spim \
 && rm -rf /var/lib/apt/lists/*
 
