@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+# Submit Server Information
+API = 'http://submit.cs.usna.edu/api'
+KEY = 'insert-instructor-api-here'
+DEBUG_SHOW_TESTCASE = True
+DEBUG = True
+
+# Base Image to use with docker containers
+BASE = 'cs-base'
+
+# How many simultaneous docker containers should run at once
+INSTANCES = 10
+
+# Time to wait before checking for new submissions (if none in queue)
+DELAYCHECK = 10
+
+# How much time to give a docker container before killing it
+KILL_AFTER = 330
+
+# Define the maximum size of output to return from stdou or stderr
+MAX_SIZE = 250000
