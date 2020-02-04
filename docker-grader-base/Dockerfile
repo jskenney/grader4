@@ -140,6 +140,7 @@ RUN apt-get update && apt-get -y install autoconf \
   python3-openssl \
   python3-pip \
   python3-setuptools \
+  racket \
   tofrodos \
   unrar \
   unzip \

@@ -10,7 +10,7 @@ DEBUG = True
 BASE = 'cs-base'
 
 # How many simultaneous docker containers should run at once
-INSTANCES = 10
+INSTANCES = 16
 
 # Time to wait before checking for new submissions (if none in queue)
 DELAYCHECK = 10
@@ -20,3 +20,9 @@ KILL_AFTER = 330
 
 # Define the maximum size of output to return from stdou or stderr
 MAX_SIZE = 250000
+
+# Define the number of CPUs to allow per docker instance
+DOCKER_CPUS = '1-31'
+
+# Define the Docker Memory Limit
+DOCKER_MEM_LIMIT = '16g'

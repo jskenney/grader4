@@ -113,7 +113,7 @@ while True:
             img = client.images.build(path=".")
             # Run the image
             #dns='8.8.8.8'
-            con=client.containers.run(img[0], auto_remove=True, cpuset_cpus='2', mem_limit='1g', remove=True, detach=True, user=666, cap_drop=['all'])
+            con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=666, cap_drop=['all'])
             container_list[con.short_id] = time.time()
             print("  Starting Container:",con.short_id)
 
