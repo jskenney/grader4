@@ -10,7 +10,7 @@
 # docker build -t cs-base .
 
 # Use the base ubuntu image as a starting point
-FROM ubuntu
+FROM ubuntu:18.04
 
 # Set the working directory to /app
 WORKDIR /app

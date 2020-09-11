@@ -1,4 +1,5 @@
 virtualenv
+numpy
 lxml
 pycrypto
 pycryptodome
