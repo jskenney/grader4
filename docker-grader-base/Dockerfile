@@ -104,17 +104,20 @@ RUN apt-get update && apt-get -y install autoconf \
   g++ \
   gcc-multilib \
   libbsd-dev \
+  libcairo2-dev \
   libc++-dev \
   libc6-dev \
   libedit-dev \
   libexpat1-dev \
   libgmp3-dev \
+  libgtk-3-dev \
   libicu-dev \
   liblzo2-dev \
   libpng-dev \
   libreadline-dev \
   libssl-dev \
   libtool \
+  libxml2-dev \
   nasm \
   ncurses-dev \
   default-jre \
