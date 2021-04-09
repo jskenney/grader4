@@ -85,6 +85,3 @@ RUN apt-get update && apt-get -y install autoconf \
 
 # Install any needed packages specified in requirements.txt
 RUN pip3 install --trusted-host pypi.python.org -r Docker.python
-
-RUN curl -o install-ssl-system.sh apt.cs.usna.edu/ssl/install-ssl-system.sh
-RUN bash install-ssl-system.sh
