@@ -1,0 +1,8 @@
+virtualenv
+numpy
+lxml
+pycrypto
+pycryptodome
+requests
+sqlparse
+daff
