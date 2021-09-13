@@ -71,6 +71,7 @@ RUN apt-get update && apt-get -y install autoconf \
   python3-openssl \
   python3-pip \
   python3-setuptools \
+  python3-networkx \
   racket \
   tofrodos \
   unrar \
@@ -81,6 +82,9 @@ RUN apt-get update && apt-get -y install autoconf \
   openjdk-11-jdk \
   valgrind \
   spim \
+  chezscheme \ 
+  chezscheme9.5-doc \
+  chezscheme9.5 \
 && rm -rf /var/lib/apt/lists/*
 
 # Install any needed packages specified in requirements.txt

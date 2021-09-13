@@ -78,6 +78,7 @@ RUN apt-get update && apt-get -y install autoconf \
   python3-openssl \
   python3-pip \
   python3-setuptools \
+  python3-networkx \
   racket \
   tofrodos \
   unrar \

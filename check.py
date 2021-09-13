@@ -71,7 +71,8 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
     if cond == 'does not have':
         return chk_student.find(chk_testcase) == -1, diff_student
     if cond == 'regex':
-        return re.match(chk_testcase, chk_student), diff_student
+        chk_testcase = chk_testcase.strip()
+        return re.match(chk_testcase, chk_student) != None, diff_student
 
     # Verify that results existed
     if cond == 'exists':
