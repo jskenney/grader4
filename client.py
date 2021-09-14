@@ -40,6 +40,7 @@ except:
 # Retrieve information from a REST style API
 # Return the results in a python style dictionary
 def post_api_json(API_PATH, PAYLOAD={}, TIMEOUT=99):
+    PAYLOAD['nosession'] = 1
     results = {}
     if PAYLOAD == {}:
         resp = requests.post(API_PATH, timeout=TIMEOUT)
@@ -52,6 +53,7 @@ def post_api_json(API_PATH, PAYLOAD={}, TIMEOUT=99):
 # Retrieve a file from a REST style API
 # Will download the file to a specified location and filename
 def post_api_file(API_PATH, FILENAME='', PAYLOAD={}, TIMEOUT=99):
+    PAYLOAD['nosession'] = 1
     if PAYLOAD == {}:
         resp = requests.post(API_PATH, timeout=TIMEOUT, allow_redirects=True)
     else:
