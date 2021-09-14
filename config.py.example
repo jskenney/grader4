@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Submit Server Information
-API = 'http://submit.cs.usna.edu/api'
+API = 'http://submit.usna.edu/api'
 KEY = 'insert-instructor-api-here'
 DEBUG_SHOW_TESTCASE = True
 DEBUG = True
@@ -10,19 +10,19 @@ DEBUG = True
 BASE = 'cs-base'
 
 # How many simultaneous docker containers should run at once
-INSTANCES = 16
+INSTANCES = 28
 
 # Time to wait before checking for new submissions (if none in queue)
-DELAYCHECK = 10
+DELAYCHECK = 5
 
 # How much time to give a docker container before killing it
 KILL_AFTER = 330
 
-# Define the maximum size of output to return from stdou or stderr
+# Define the maximum size of output to return from stdout or stderr
 MAX_SIZE = 250000
 
 # Define the number of CPUs to allow per docker instance
-DOCKER_CPUS = '1-31'
+DOCKER_CPUS = '1-51'
 
 # Define the Docker Memory Limit
-DOCKER_MEM_LIMIT = '16g'
+DOCKER_MEM_LIMIT = '8g'
