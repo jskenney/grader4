@@ -23,6 +23,7 @@ except:
 # Retrieve information from a REST style API
 # Return the results in a python style dictionary
 def post_api_json(API_PATH, PAYLOAD={}, TIMEOUT=99):
+    PAYLOAD['nosession'] = 1
     results = {}
     if PAYLOAD == {}:
         resp = requests.post(API_PATH, timeout=TIMEOUT)
