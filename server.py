@@ -75,7 +75,8 @@ while True:
         if row['project'] not in submission_print[row['course']]:
             submission_print[row['course']][row['project']] = {}
         if row['user'] not in submission_print[row['course']][row['project']]:
-            submission_print[row['course']][row['project']][row['user']] = 1
+            submission_print[row['course']][row['project']][row['user']] = 0
+        submission_print[row['course']][row['project']][row['user']] = submission_print[row['course']][row['project']][row['user']] + 1
 
     print('\x1b[2J')
     print('Available Submission/Tests to process = '+str(len(submission_list['results']))+' (estimated)')
@@ -84,7 +85,7 @@ while True:
         for project in submission_print[course]:
             print('     --', project)
             for user in submission_print[course][project]:
-                print('        --', user)
+                print('        --', user, '(', submission_print[course][project][user],')')
 
     # For some reason this gets confused every now and then...
     try:
