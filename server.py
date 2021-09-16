@@ -108,12 +108,11 @@ while True:
         client.images.prune()
         client.containers.prune()
 
-        for build in range(INSTANCES-len(ccl)):
+        for build in range(min(INSTANCES-len(ccl), len(submission_list['results']))):
 
             # Create an image to work with
             img = client.images.build(path=".")
             # Run the image
-            #dns='8.8.8.8'
             con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=666, cap_drop=['all'])
             container_list[con.short_id] = time.time()
             print("  Starting Container:",con.short_id)
