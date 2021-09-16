@@ -10,9 +10,19 @@ sys.dont_write_bytecode = True
 import re
 
 # Possible options for:
-#  source: 'Return Code', 'Infinite Loop', 'Student source code', 'Created File', 'Run time'
-#  cond: 'compiles', 'is exactly', 'whitespace', 'has', 'does not have', 'exists', 'is true', 'is false'
-#        'greater than', 'less than', 'greater or equal', 'less or equal'
+#  source: 'Return Code',
+#          'Infinite Loop',
+#          'Student source code',
+#          'Created File',
+#          'Run time'
+#  cond:  'compiles',
+#         'is exactly',
+#         'whitespace',
+#         'has', 'does not have',
+#         'exists',
+#         'is true', 'is false',
+#         'greater than', 'less than', 'greater or equal', 'less or equal',
+#         'regex'
 # Check the results and see if the test was successful
 # Returns pass/fail and the value it was tested against.
 def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, stime, infinite, debug=True):
