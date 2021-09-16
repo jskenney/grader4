@@ -68,8 +68,23 @@ while True:
     # for processing.
     submission_list = post_api_json(API+'/submission/next', {'apikey':KEY})
 
+    submission_print = {}
+    for row in submission_list['results']:
+        if row['course'] not in submission_print:
+            submission_print[row['course']] = {}
+        if row['project'] not in submission_print[row['course']]:
+            submission_print[row['course']][row['project']] = {}
+        if row['user'] not in submission_print[row['course']][row['project']]:
+            submission_print[row['course']][row['project']][row['user']] = 1
+
     print('\x1b[2J')
     print('Available Submission/Tests to process = '+str(len(submission_list['results']))+' (estimated)')
+    for course in submission_print:
+        print('  --', course)
+        for project in submission_print[course]:
+            print('     --', project)
+            for user in submission_print[course][project]:
+                print('        --', user)
 
     # For some reason this gets confused every now and then...
     try:
