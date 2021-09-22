@@ -79,6 +79,7 @@ while True:
         submission_print[row['course']][row['project']][row['user']] = submission_print[row['course']][row['project']][row['user']] + 1
 
     print('\x1b[2J')
+    print(time.asctime(time.localtime(time.time())))
     print('Available Submission/Tests to process = '+str(len(submission_list['results']))+' (estimated)')
     for course in submission_print:
         print('  --', course)
