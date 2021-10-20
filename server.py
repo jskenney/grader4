@@ -43,22 +43,6 @@ container_list = {}
 # Main Loop
 while True:
 
-    ##############################################################################
-    # Determine if we should kill any running docker containers
-    running_list = post_api_json(API+'/results/inprogress', {'apikey':KEY})
-    running_list_search = {}
-    kill_list = []
-    if 'results' in running_list:
-        for ip in running_list['results']:
-            try:
-                running_list_search[ip['process']] = ip
-                running_list_search[ip['process'][:10]] = ip
-                if ip['status'] == 'kill':
-                    kill_list.append(ip['process'])
-                    kill_list.append(ip['process'][:10])
-            except:
-                pass
-
     # Sleep for just a bit
     time.sleep(1.0)
 
@@ -96,6 +80,23 @@ while True:
 
     # List and/or kill a container
     if len(ccl) > 0:
+
+        ##############################################################################
+        # Determine if we should kill any running docker containers
+        running_list = post_api_json(API+'/results/inprogress', {'apikey':KEY})
+        running_list_search = {}
+        kill_list = []
+        if 'results' in running_list:
+            for ip in running_list['results']:
+                try:
+                    running_list_search[ip['process']] = ip
+                    running_list_search[ip['process'][:10]] = ip
+                    if ip['status'] == 'kill':
+                        kill_list.append(ip['process'])
+                        kill_list.append(ip['process'][:10])
+                except:
+                    pass
+        
         new_list = {}
         for c in ccl:
             id = c.short_id
