@@ -56,6 +56,29 @@ while True:
     # for processing.
     submission_list = post_api_json(API+'/submission/next', {'apikey':KEY})
 
+    # Check the docker types of all received submissions
+    docker_bases = {}
+    for row in submission_list['results']:
+        found_base = row['docker']
+        if found_base not in docker_bases:
+            docker_bases[found_base] = [0,0]
+        docker_bases[found_base][0] += 1
+
+    # Create an easily pop'd list of the docker bases
+    docker_bases_pop = []
+    continue_loop = True
+    while continue_loop:
+        found_one = False
+        for key in docker_bases:
+            if docker_bases[key][0] != docker_bases[key][1]:
+                docker_bases_pop.append(key)
+                docker_bases[key][1] += 1
+                found_one = True
+        if not found_one:
+            continue_loop = False
+    docker_bases_pop.reverse()
+
+    # Display Results
     submission_print = {}
     for row in submission_list['results']:
         if row['course'] not in submission_print:
@@ -133,7 +156,8 @@ while True:
         for build in range(min(INSTANCES-len(ccl), len(submission_list['results']))):
 
             # Build a new dockerfile on the fly
-            DF = "FROM "+BASE+"""
+            client_base = docker_bases_pop.pop()
+            DF = "FROM "+client_base+"""
 MAINTAINER Jeff Kenney
 COPY . /app
 WORKDIR /app
@@ -145,7 +169,7 @@ CMD python3 client.py
             # Run the image
             con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=666, cap_drop=['all'])
             container_list[con.short_id] = time.time()
-            print("  Starting Container:",con.short_id)
+            print("  Starting Container: (", client_base,")", con.short_id)
 
     else:
         time.sleep(DELAYCHECK)
