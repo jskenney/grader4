@@ -33,8 +33,12 @@ def post_api_json(API_PATH, PAYLOAD={}, TIMEOUT=99):
         results = json.loads(resp.text)
     return results
 
-# Connect to the local docker instance
+# Import Docker Library, Modify to allow text based dockerfile
 import docker
+import docker.api.build
+docker.api.build.process_dockerfile = lambda dockerfile, path: ('Dockerfile', dockerfile)
+
+# Connect to the local docker instance
 client = docker.from_env()
 
 # Track containers
@@ -96,7 +100,7 @@ while True:
                         kill_list.append(ip['process'][:10])
                 except:
                     pass
-        
+
         new_list = {}
         for c in ccl:
             id = c.short_id
@@ -128,8 +132,16 @@ while True:
 
         for build in range(min(INSTANCES-len(ccl), len(submission_list['results']))):
 
+            # Build a new dockerfile on the fly
+            DF = "FROM "+BASE+"""
+MAINTAINER Jeff Kenney
+COPY . /app
+WORKDIR /app
+CMD python3 client.py
+"""
+
             # Create an image to work with
-            img = client.images.build(path=".")
+            img = client.images.build(path=".",dockerfile=DF)
             # Run the image
             con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=666, cap_drop=['all'])
             container_list[con.short_id] = time.time()
