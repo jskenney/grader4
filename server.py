@@ -60,9 +60,10 @@ while True:
     docker_bases = {}
     for row in submission_list['results']:
         found_base = row['docker']
-        if found_base not in docker_bases:
-            docker_bases[found_base] = [0,0]
-        docker_bases[found_base][0] += 1
+        if found_base in SUPPORTED_BASES:
+            if found_base not in docker_bases:
+                docker_bases[found_base] = [0,0]
+            docker_bases[found_base][0] += 1
 
     # Create an easily pop'd list of the docker bases
     docker_bases_pop = []
@@ -153,7 +154,7 @@ while True:
         client.images.prune()
         client.containers.prune()
 
-        for build in range(min(INSTANCES-len(ccl), len(submission_list['results']))):
+        for build in range(min(INSTANCES-len(ccl), len(docker_bases_pop))):
 
             # Build a new dockerfile on the fly
             client_base = docker_bases_pop.pop()
