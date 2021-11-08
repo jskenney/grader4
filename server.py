@@ -161,7 +161,7 @@ while True:
 MAINTAINER Jeff Kenney
 COPY . /app
 WORKDIR /app
-CMD python3 client.py
+CMD python3 client.py --base """ + client_base + """
 """
 
             # Create an image to work with
