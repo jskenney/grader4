@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Fix Permissions Just In Case"
-chmod 644 *.py Dockerfile README
+chmod 644 *.py README
 chmod 755 server.py client.py
 
 while true
