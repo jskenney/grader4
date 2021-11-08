@@ -24,6 +24,9 @@ MAINTAINER Jeff Kenney
 # Set Environment variable
 ENV DEBIAN_FRONTEND noninteractive
 
+# Connect to the Patching Server for faster downloads
+RUN echo "Acquire::http::Proxy \"http://apt.cs.usna.edu:3142\";" | tee /etc/apt/apt.conf.d/00aptproxy
+
 # Install any required Ubuntu Packages
 RUN apt-get update && apt-get -y install autoconf \
   automake \
