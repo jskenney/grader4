@@ -86,12 +86,17 @@ try:
 
     # Define Required Command Line Arguments
     parser = argparse.ArgumentParser(description="Autograde an available job.")
-    parser.add_argument('--course', dest='course', metavar='COURSE', default='%', nargs='?', help='select a specific course')
-    parser.add_argument('--project', dest='project', metavar='PROJECT', default='%', nargs='?', help='select a specific project')
-    parser.add_argument('--user', dest='user', metavar='USER', default='%', nargs='?', help='select a user to process')
-    parser.add_argument('--rulename', dest='rulename', metavar='RULENAME', default='%', nargs='?', help='select a specific testcase to run')
+    parser.add_argument('--course', dest='course', metavar='COURSE', default='%', nargs=1, help='select a specific course')
+    parser.add_argument('--project', dest='project', metavar='PROJECT', default='%', nargs=1, help='select a specific project')
+    parser.add_argument('--base', dest='base', metavar='DOCKERBASE', default='%', nargs=1, help='select default docker image')
+    parser.add_argument('--user', dest='user', metavar='USER', default='%', nargs=1, help='select a user to process')
+    parser.add_argument('--rulename', dest='rulename', metavar='RULENAME', default='%', nargs=1, help='select a specific testcase to run')
     parser.add_argument('--debug', dest='debug', metavar='DEBUGVALUE', default='%', nargs='?', help='set a specific delay to allow file system debugging')
     args = parser.parse_args()
+
+    # Select docker base image
+    if args.base != '%':
+        BASE = args.base[0]
 
     # Change debugging level
     if args.debug != '%':
@@ -103,9 +108,9 @@ try:
 
     # Retrieve a specific project/user/test to process, override already completed if specificed manually
     if args.course != '%' and args.project != '%' and args.user != '%' and args.rulename != '%':
-        submission_list = post_api_json(API+'/submission/verify', {'apikey':KEY, 'course': args.course, 'project': args.project, 'user':args.user, 'rulename':args.rulename})
+        submission_list = post_api_json(API+'/submission/verify', {'apikey':KEY, 'base':BASE, 'course': args.course, 'project': args.project, 'user':args.user, 'rulename':args.rulename})
     else:
-        submission_list = post_api_json(API+'/submission/claim', {'apikey':KEY})
+        submission_list = post_api_json(API+'/submission/claim', {'apikey':KEY, 'base':BASE})
 
     # Verify that there are results to work with
     if 'results' not in submission_list or len(submission_list['results']) < 1:
