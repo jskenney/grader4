@@ -37,7 +37,7 @@ and copy the following contents
 
 Step 9, builder base docker image
 
-cd docker-grader-base
+cd cs-base
 docker build -t cs-base .
 
 Step 10, configure number of running instances in config.py
