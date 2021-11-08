@@ -44,11 +44,20 @@ client = docker.from_env()
 # Track containers
 container_list = {}
 
+# How often should we register the docker bases with the system.
+docker_interval = 3600
+docker_last_call = 0
+
 # Main Loop
 while True:
 
     # Sleep for just a bit
     time.sleep(1.0)
+
+    # Register the available docker bases with the submit system
+    if time.time() - docker_interval > docker_last_call:
+        docker_last_call = time.time()
+        post_api_json(API+'/docker/register', {'apikey':KEY, 'bases':','.join(SUPPORTED_BASES)})
 
     ##############################################################################
     # Retrieve submissions waiting to be processed, if a submissionID (sid)
