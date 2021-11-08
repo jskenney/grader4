@@ -46,16 +46,31 @@ Step 11, run as Server
 
 python3 server.py
 
+###############################################################################
 NOTE: the permissions of these files must be readable by other users,
 the server will spawn these under a different user and if the permissions are
 of this user will not be able to run the client.
 
+###############################################################################
+NOTE: To test the docker system with the lines below, you will need to create
+a Dockerfile, use the following text as a basis:
+
+echo """
+FROM cs-base
+MAINTAINER Jeff Kenney
+COPY . /app
+WORKDIR /app
+CMD python3 client.py --base cs-base
+""" | tee Dockerfile
+
+###############################################################################
 NOTE: you can test the docker instance directly via
 docker run --rm $(docker build -q .)
 
 NOTE: you can test a specific user's work via
 docker run --rm $(docker build -q .) python3 client.py --course SI204 --project hw06 --user m210072 --rulename case1
 
+###############################################################################
 NOTE: if you want to delete all docker containers and images do:
 docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
