@@ -32,6 +32,7 @@ RUN apt-get update && apt-get -y install autoconf \
   clang \
   clisp \
   cmake \
+  cppcheck \
   curl \
   cython \
   expat \
@@ -82,7 +83,7 @@ RUN apt-get update && apt-get -y install autoconf \
   openjdk-11-jdk \
   valgrind \
   spim \
-  chezscheme \ 
+  chezscheme \
   chezscheme9.5-doc \
   chezscheme9.5 \
 && rm -rf /var/lib/apt/lists/*
