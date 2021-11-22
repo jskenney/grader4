@@ -58,6 +58,7 @@ RUN apt-get update && apt-get -y install autoconf \
   libssl-dev \
   libtool \
   libxml2-dev \
+  llvm \
   nasm \
   ncurses-dev \
   default-jre \
