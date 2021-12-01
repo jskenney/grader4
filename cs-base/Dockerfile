@@ -87,6 +87,7 @@ RUN apt-get update && apt-get -y install autoconf \
   openjdk-11-jdk \
   valgrind \
   spim \
+  wamerican \
   chezscheme \
   chezscheme9.5-doc \
   chezscheme9.5 \
