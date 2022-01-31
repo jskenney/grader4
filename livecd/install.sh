@@ -8,7 +8,7 @@
 # Install Software in Cubic
 apt update
 apt dist-upgrade -y
-apt install -y docker.io git curl
+apt install -y docker.io git curl tmux
 
 # Purge Ubuntu installers in the graphical environment
 apt autoremove --purge ubiquity ubiquity-casper ubiquity-frontend-gtk ubiquity-slideshow-ubuntu ubiquity-ubuntu-artwork
@@ -40,8 +40,21 @@ git clone https://gitlab.usna.edu/webdev/grader-v4.git
 chown -R 1000:1000 grader-v4
 popd
 
-#
+# For autorun
+echo """[Desktop Entry]
+Type=Application
+Exec=/opt/grader-v4/livecd/autostart-step1.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Start Grader
+Name=Start Grader
+Comment[en_US]=Start Grader
+Comment=Start Grader
+Terminal=true
+""" | tee /etc/xdg/autostart/grader.desktop
 
+# Next set of testing
 pushd /tmp/grader-v4/cs-base
 docker build -t cs-base .
 popd
