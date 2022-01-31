@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker run --rm -it ubuntu
+/usr/bin/tmux new-session -s grader '/usr/bin/docker run --rm -it ubuntu'
