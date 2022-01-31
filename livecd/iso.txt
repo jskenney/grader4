@@ -1,0 +1,19 @@
+menuentry "Ubuntu 20.04 ISO" {
+    rmmod tpm
+    set root=(hd0,1)
+    set isofile="/isos/ubuntu-20.04-desktop-amd64.iso"
+        loopback loop $isofile
+        linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=$isofile persistent persistent-path=/ub2004-1/ fsck.mode=skip quiet splash toram --
+        initrd (loop)/casper/initrd
+}
+
+# Use cubic and server iso
+https://askubuntu.com/questions/1361056/editing-ubuntu-iso-with-cubic-to-skip-the-disk-check
+https://askubuntu.com/questions/1209507/ubuntu-server-image-with-predefined-user-and-ssh-key-for-mass-deployment
+https://askubuntu.com/questions/1175819/create-an-unattended-ubuntu-18-04-live-cd-that-run-on-demo-try-ubuntu-environm
+
+apt update
+apt dist-upgrade -y
+apt autoremove -y
+
+apt install git curl docker.io
