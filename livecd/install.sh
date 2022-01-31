@@ -37,7 +37,7 @@ echo """{
 # Clone graderv4
 pushd /opt
 git clone https://gitlab.usna.edu/webdev/grader-v4.git
-chown -R 1000:1000 grader-v4
+chown -R 999:999 grader-v4
 popd
 
 # For autorun
