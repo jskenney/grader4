@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Perform a git pull"
+git pull
+
 echo "Delete previous docker images"
 docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
