@@ -91,6 +91,7 @@ RUN apt-get update && apt-get -y install autoconf \
   chezscheme \
   chezscheme9.5-doc \
   chezscheme9.5 \
+  junit4 \
 && rm -rf /var/lib/apt/lists/*
 
 # Install any needed packages specified in requirements.txt
