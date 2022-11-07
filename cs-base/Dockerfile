@@ -77,6 +77,7 @@ RUN apt-get update && apt-get -y install autoconf \
   python3-pip \
   python3-setuptools \
   python3-networkx \
+  python3-pandas \
   racket \
   tofrodos \
   unrar \
@@ -95,4 +96,5 @@ RUN apt-get update && apt-get -y install autoconf \
 && rm -rf /var/lib/apt/lists/*
 
 # Install any needed packages specified in requirements.txt
+RUN pip3 install --trusted-host pypi.python.org --upgrade setuptools
 RUN pip3 install --trusted-host pypi.python.org -r Docker.python

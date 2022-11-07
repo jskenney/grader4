@@ -6,3 +6,4 @@ pycryptodome
 requests
 sqlparse
 daff
+plotly
