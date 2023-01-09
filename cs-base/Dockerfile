@@ -59,6 +59,7 @@ RUN apt-get update && apt-get -y install autoconf \
   libtool \
   libxml2-dev \
   llvm \
+  mysql-client \
   nasm \
   ncurses-dev \
   default-jre \
