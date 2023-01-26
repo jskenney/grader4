@@ -59,6 +59,7 @@ RUN apt-get update && apt-get -y install autoconf \
   libtool \
   libxml2-dev \
   llvm \
+  locales \
   mysql-client \
   nasm \
   ncurses-dev \
@@ -95,6 +96,8 @@ RUN apt-get update && apt-get -y install autoconf \
   chezscheme9.5 \
   junit4 \
 && rm -rf /var/lib/apt/lists/*
+
+RUN locale-gen en_US && update-locale LANG=en_US
 
 # Install any needed packages specified in requirements.txt
 RUN pip3 install --trusted-host pypi.python.org --upgrade setuptools
