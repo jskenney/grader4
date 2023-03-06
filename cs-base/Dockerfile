@@ -66,20 +66,12 @@ RUN apt-get update && apt-get -y install autoconf \
   default-jre \
   perl \
   pkg-config \
-  python3-matplotlib \
-  python3-nltk \
-  python3-numpy \
-  python3-ply \
-  python3-scipy \
   python3-mysqldb \
   python3-mysql.connector \
   python3-dev \
-  python3-lxml \
-  python3-openssl \
   python3-pip \
+  python3-openssl \
   python3-setuptools \
-  python3-networkx \
-  python3-pandas \
   racket \
   tofrodos \
   unrar \

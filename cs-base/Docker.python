@@ -1,6 +1,12 @@
-virtualenv
+gensim
 numpy
+scipy
+pandas
+matplotlib
+nltk
 lxml
+networkx
+virtualenv
 pycrypto
 pycryptodome
 requests
@@ -9,4 +15,3 @@ daff
 plotly
 beautifulsoup4
 opencv-python
-gensim
