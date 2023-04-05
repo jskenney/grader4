@@ -80,6 +80,8 @@ def test(stdin, source, sourcefile, cond, outvalue, stdout, stderr, returnval, s
         return chk_student.find(chk_testcase) != -1, diff_student
     if cond == 'does not have':
         return chk_student.find(chk_testcase) == -1, diff_student
+    if cond == 'endswith':
+        return chk_student.endswith(chk_testcase), diff_student
     if cond == 'regex':
         chk_testcase = chk_testcase.strip()
         return re.match(chk_testcase, chk_student) != None, diff_student
