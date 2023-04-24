@@ -28,7 +28,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN echo "Acquire::http::Proxy \"http://apt.cs.usna.edu:3142\";" | tee /etc/apt/apt.conf.d/00aptproxy
 
 # For Dan's Class
-sudo apt-add-repository -y ppa:deadsnakes/ppa
+RUN apt-add-repository -y ppa:deadsnakes/ppa
 
 # Install any required Ubuntu Packages
 RUN apt-get update && apt-get -y install \
