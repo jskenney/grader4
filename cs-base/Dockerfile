@@ -27,12 +27,8 @@ ENV DEBIAN_FRONTEND noninteractive
 # Connect to the Patching Server for faster downloads
 RUN echo "Acquire::http::Proxy \"http://apt.cs.usna.edu:3142\";" | tee /etc/apt/apt.conf.d/00aptproxy
 
-# For Dan's Class
-RUN apt-add-repository -y ppa:deadsnakes/ppa
-
 # Install any required Ubuntu Packages
 RUN apt-get update && apt-get -y install \
-  python3.11 \
   autoconf \
   automake \
   bison \
@@ -95,6 +91,9 @@ RUN apt-get update && apt-get -y install \
 && rm -rf /var/lib/apt/lists/*
 
 RUN locale-gen en_US && update-locale LANG=en_US
+
+# For Dan's Class
+RUN apt-add-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get -y install python3.11 python3.11-venv
 
 # Install any needed packages specified in requirements.txt
 RUN pip3 install --trusted-host pypi.python.org --upgrade setuptools
