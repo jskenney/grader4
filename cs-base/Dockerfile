@@ -27,8 +27,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # Connect to the Patching Server for faster downloads
 RUN echo "Acquire::http::Proxy \"http://apt.cs.usna.edu:3142\";" | tee /etc/apt/apt.conf.d/00aptproxy
 
+# For Dan's Class
+sudo apt-add-repository -y ppa:deadsnakes/ppa
+
 # Install any required Ubuntu Packages
-RUN apt-get update && apt-get -y install autoconf \
+RUN apt-get update && apt-get -y install \
+  python3.11 \
+  autoconf \
   automake \
   bison \
   build-essential \
