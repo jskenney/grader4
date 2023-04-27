@@ -173,7 +173,7 @@ try:
     debugPrint(DEBUG, 'Extracting Submission')
     post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'extracting', 'process':DOCKER, 'lint':LINT})
     cmd = 'tar -xvpf .student.code.tgz'
-    stdout, stderr, return_code, etime = runner.run(cmd, '')
+    stdout, stderr, return_code, etime = runner.run(cmd, '', _envvar=_envvar)
     os.remove('.student.code.tgz')
     LINT += 'extraction:\n' + stdout + '\nERROR:' + stderr + '\nextraction-complete.\n'
 
@@ -192,8 +192,15 @@ try:
             cmd = 'make -f ' + testcase['makefile'] + ' ' + testcase['compile_target']
         else:
             cmd = 'make ' + testcase['compile_target']
-        print('Beginning COMPILE step  ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
-        stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
+        _envvar = {'gradercourse': submission['course'],
+                 'graderpid': str(submission['pid']),
+                 'graderproject': submission['project'],
+                 'gradersid': str(submission['sid']),
+                 'graderuser': submission['user'],
+                 'gradertid': str(submission['tid']),
+                 'graderrulename': testcase['rulename']
+                 }
+        stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'], _envvar=_envvar)
         if len(stdout) > MAX_SIZE:
             stdout = stdout[:MAX_SIZE]
         if len(stderr) > MAX_SIZE:
@@ -217,7 +224,7 @@ try:
         else:
             cmd = 'make ' + testcase['analysis_target']
         print('Beginning ANALYSIS step ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
-        stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'])
+        stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'], _envvar=_envvar)
         if len(stdout) > MAX_SIZE:
             stdout = stdout[:MAX_SIZE]
         if len(stderr) > MAX_SIZE:
@@ -244,7 +251,7 @@ try:
             else:
                 cmd = 'make ' + testcase['run_target']
             print( 'Beginning RUN step      ['+submission['course']+'] ['+str(submission['pid'])+' '+submission['project']+'] ['+str(submission['sid'])+' '+submission['user']+'] ['+str(submission['tid'])+' '+testcase['rulename']+'] ['+str(testcase['infinite'])+'] ['+cmd+']')
-            stdout, stderr, return_code, etime = runner.run(cmd, testcase['stdin'], testcase['infinite'])
+            stdout, stderr, return_code, etime = runner.run(cmd, testcase['stdin'], testcase['infinite'], _envvar=_envvar)
             if len(stdout) > MAX_SIZE:
                 stdout = stdout[:MAX_SIZE]
             if len(stderr) > MAX_SIZE:
