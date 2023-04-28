@@ -173,7 +173,7 @@ try:
     debugPrint(DEBUG, 'Extracting Submission')
     post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'extracting', 'process':DOCKER, 'lint':LINT})
     cmd = 'tar -xvpf .student.code.tgz'
-    stdout, stderr, return_code, etime = runner.run(cmd, '', _envvar=_envvar)
+    stdout, stderr, return_code, etime = runner.run(cmd, '')
     os.remove('.student.code.tgz')
     LINT += 'extraction:\n' + stdout + '\nERROR:' + stderr + '\nextraction-complete.\n'
 
@@ -181,6 +181,17 @@ try:
     for item in os.listdir('.'):
         debugPrint(DEBUG, "  {:<7} {:<30}".format('file:', item))
     debugPrint(DEBUG, '')
+
+    ##############################################################################
+    # Setup available environmental variables
+    _envvar = {'gradercourse':   submission['course'],
+               'graderproject':  submission['project'],
+               'graderuser':     submission['user'],
+               'graderrulename': testcase['rulename'],
+               'graderpid':      str(submission['pid']),
+               'gradersid':      str(submission['sid']),
+               'gradertid':      str(submission['tid'])
+              }
 
     ##############################################################################
     # Makefile Compile Step
@@ -192,14 +203,6 @@ try:
             cmd = 'make -f ' + testcase['makefile'] + ' ' + testcase['compile_target']
         else:
             cmd = 'make ' + testcase['compile_target']
-        _envvar = {'gradercourse': submission['course'],
-                 'graderpid': str(submission['pid']),
-                 'graderproject': submission['project'],
-                 'gradersid': str(submission['sid']),
-                 'graderuser': submission['user'],
-                 'gradertid': str(submission['tid']),
-                 'graderrulename': testcase['rulename']
-                 }
         stdout, stderr, return_code, etime = runner.run(cmd, '', testcase['infinite'], _envvar=_envvar)
         if len(stdout) > MAX_SIZE:
             stdout = stdout[:MAX_SIZE]
