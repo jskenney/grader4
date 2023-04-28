@@ -50,7 +50,7 @@ def run(_exec, _input, _timeout=20, _envvar={}, _shell=True):
             _timeout = 20
     _newenv = os.environ.copy()
     for key in _envvar:
-        os.environ[key] = _envvar[key]
+        _newenv[key] = _envvar[key]
     _start = time.time()
     p = Popen(_exec, stdin=PIPE, stdout=PIPE, stderr=PIPE, env=_newenv, shell=_shell)
     setNonBlocking(p.stdout)
