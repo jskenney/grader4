@@ -10,7 +10,7 @@
 # docker build -t cs-base .
 
 # Use the base ubuntu image as a starting point
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Set the working directory to /app
 WORKDIR /app
@@ -39,7 +39,7 @@ RUN apt-get update && apt-get -y install \
   cmake \
   cppcheck \
   curl \
-  cython \
+  cython3 \
   expat \
   expect \
   flex \
@@ -86,8 +86,7 @@ RUN apt-get update && apt-get -y install \
   spim \
   wamerican \
   chezscheme \
-  chezscheme9.5-doc \
-  chezscheme9.5 \
+  chezscheme-doc \
   junit4 \
 && rm -rf /var/lib/apt/lists/*
 
