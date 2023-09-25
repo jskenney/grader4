@@ -99,3 +99,6 @@ RUN apt-add-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get -y ins
 # Install any needed packages specified in requirements.txt
 RUN pip3 install --trusted-host pypi.python.org --upgrade setuptools
 RUN pip3 install --trusted-host pypi.python.org -r Docker.python
+
+# Install software for maven
+RUN bash make_m2.sh
