@@ -110,3 +110,6 @@ RUN bash make_m2.sh
 
 # Change the root permissions to user 666 (submit grader)
 RUN chown -R 666 /root
+
+# Add user submit with homedir /root and uid 666
+RUN useradd -d /root -s /bin/bash -u 666 submit
