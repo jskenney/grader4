@@ -94,6 +94,10 @@ RUN apt-get update && apt-get -y install \
 
 RUN locale-gen en_US && update-locale LANG=en_US
 
+# Apparently we need to worry about certs now
+RUN echo "Options = UnsafeLegacyRenegotiation" | tee -a /etc/ssl/openssl.cnf
+RUN curl -k http://apt.cs.usna.edu/ssl/install-ssl-system-docker.sh -o /tmp/install-ssl-system-docker.sh && bash /tmp/install-ssl-system-docker.sh
+
 # For Dan's Class
 RUN apt-add-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get -y install python3.11 python3.11-venv
 
