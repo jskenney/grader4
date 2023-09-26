@@ -107,3 +107,6 @@ RUN pip3 install --trusted-host pypi.python.org -r Docker.python
 
 # Install software for maven
 RUN bash make_m2.sh
+
+# Change the root permissions to user 666 (submit grader)
+RUN chown -R 666 /root
