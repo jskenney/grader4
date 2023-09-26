@@ -83,6 +83,7 @@ RUN apt-get update && apt-get -y install \
   zlib1g-dev \
   openjdk-11-jdk \
   openjdk-17-jdk \
+  maven \
   valgrind \
   spim \
   wamerican \
