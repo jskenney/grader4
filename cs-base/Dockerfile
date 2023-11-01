@@ -68,6 +68,9 @@ RUN apt-get update && apt-get -y install \
   default-jre \
   perl \
   pkg-config \
+  r-base \
+  r-base-dev \
+  r-cran-rmysql \
   python3-mysqldb \
   python3-mysql.connector \
   python3-dev \
