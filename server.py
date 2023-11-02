@@ -57,10 +57,14 @@ while True:
     # Register the available docker bases with the submit system
     if time.time() - docker_interval > docker_last_call:
         docker_last_call = time.time()
-        post_api_json(API+'/docker/register', {'apikey':KEY, 'bases':','.join(SUPPORTED_BASES)})
+        post_api_json(API+'/docker/register', {'apikey':KEY, 'bases':','.join(list(BASE_CONFIG.keys()))})
 
     # Loop through all possible supported bases for this system
-    for BASE in SUPPORTED_BASES:
+    for BASE in BASE_CONFIG:
+
+        INSTANCES = BASE_CONFIG[BASE]['INSTANCES']
+        DOCKER_CPUS = BASE_CONFIG[BASE]['DOCKER_CPUS']
+        DOCKER_MEM_LIMIT = BASE_CONFIG[BASE]['DOCKER_MEM_LIMIT']
 
         ##############################################################################
         # Retrieve submissions waiting to be processed, if a submissionID (sid)
