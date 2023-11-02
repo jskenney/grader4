@@ -76,7 +76,7 @@ while True:
         docker_bases = {}
         for row in submission_list['results']:
             found_base = row['docker']
-            if found_base in SUPPORTED_BASES:
+            if found_base == BASE:
                 if found_base not in docker_bases:
                     docker_bases[found_base] = [0,0]
                 docker_bases[found_base][0] += 1
