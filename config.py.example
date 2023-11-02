@@ -6,23 +6,22 @@ KEY = 'insert-instructor-api-here'
 DEBUG_SHOW_TESTCASE = True
 DEBUG = True
 
-# Supported Bases
-SUPPORTED_BASES = ['cs_base']
-
-# How many simultaneous docker containers should run at once
-INSTANCES = 28
+# List the available bases and their configurations.
+#   INSTANCES - How many simultaneous docker containers should run at once, ex 8
+#   DOCKER_CPUS - Define the number of CPUs to allow per docker instance, ex '1-20'
+#   DOCKER_MEM_LIMIT - Define the Docker Memory Limit, ex '16g'
+BASE_CONFIG = {'cs-base':
+                         {'INSTANCES': 8,
+                          'DOCKER_CPUS': '1-20',
+                          'DOCKER_MEM_LIMIT': '16g'
+                         }
+              }
 
 # Time to wait before checking for new submissions (if none in queue)
-DELAYCHECK = 5
+DELAYCHECK = 2
 
 # How much time to give a docker container before killing it
 KILL_AFTER = 330
 
 # Define the maximum size of output to return from stdout or stderr
 MAX_SIZE = 250000
-
-# Define the number of CPUs to allow per docker instance
-DOCKER_CPUS = '1-51'
-
-# Define the Docker Memory Limit
-DOCKER_MEM_LIMIT = '8g'
