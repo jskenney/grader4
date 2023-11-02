@@ -6,9 +6,6 @@ KEY = 'insert-instructor-api-here'
 DEBUG_SHOW_TESTCASE = True
 DEBUG = True
 
-# Default Base Image to use with docker containers
-BASE = 'cs-base'
-
 # Supported Bases
 SUPPORTED_BASES = ['cs_base']
 
