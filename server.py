@@ -63,7 +63,7 @@ while True:
     # Retrieve submissions waiting to be processed, if a submissionID (sid)
     # was provided as part of the command line, submit that to the system
     # for processing.
-    submission_list = post_api_json(API+'/submission/next', {'apikey':KEY})
+    submission_list = post_api_json(API+'/submission/next', {'apikey':KEY, 'bases':','.join(SUPPORTED_BASES)})
 
     # Check the docker types of all received submissions
     docker_bases = {}
