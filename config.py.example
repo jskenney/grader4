@@ -3,8 +3,6 @@
 # Submit Server Information
 API = 'http://submit.usna.edu/api'
 KEY = 'insert-instructor-api-here'
-DEBUG_SHOW_TESTCASE = True
-DEBUG = True
 
 # List the available bases and their configurations.
 #   INSTANCES - How many simultaneous docker containers should run at once, ex 8
@@ -29,3 +27,7 @@ MAX_SIZE = 250000
 # Define a file, that if it exists, will prevent the system from spawning
 # new docker instances (good for preventing startups during maintenance)
 KILL_FILE = '/tmp/stopsubmit'
+
+# Client Specific Settings
+DEBUG_SHOW_TESTCASE = True
+DEBUG = True
