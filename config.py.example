@@ -25,3 +25,7 @@ KILL_AFTER = 330
 
 # Define the maximum size of output to return from stdout or stderr
 MAX_SIZE = 250000
+
+# Define a file, that if it exists, will prevent the system from spawning
+# new docker instances (good for preventing startups during maintenance)
+KILL_FILE = '/tmp/stopsubmit'

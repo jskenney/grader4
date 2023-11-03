@@ -164,7 +164,7 @@ while True:
             container_list = new_list
 
         # Verify that there are results to work with
-        if 'results' in submission_list and len(submission_list['results']) > 0 and len(ccl) < INSTANCES:
+        if 'results' in submission_list and len(submission_list['results']) > 0 and len(ccl) < INSTANCES and not os.path.isfile(KILL_FILE):
 
             # cleanup
             client.images.prune()
