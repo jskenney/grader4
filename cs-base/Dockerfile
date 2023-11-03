@@ -74,6 +74,7 @@ RUN apt-get update && apt-get -y install \
   python3-mysqldb \
   python3-mysql.connector \
   python3-dev \
+  python3-graphviz \
   python3-pip \
   python3-openssl \
   python3-setuptools \
