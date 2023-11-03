@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-while true
+# if the file /tmp/stopsubmit does not exist
+# keep restarting the server (useful if this
+# script is started via cron)
+while [ ! -f /tmp/stopsubmit ]
 do
   echo "Fix Permissions Just In Case"
   chmod 644 *.py README
