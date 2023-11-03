@@ -108,7 +108,7 @@ while True:
 
         print('\x1b[2J')
         print(time.asctime(time.localtime(time.time())))
-        print('Available Submission/Tests to process = '+str(len(submission_list['results']))+' (estimated)')
+        print('Available Submission/Tests to process = '+str(len(submission_list['results']))+' (estimated) ('+BASE+')')
         for course in submission_print:
             print('  --', course)
             for project in submission_print[course]:
