@@ -7,6 +7,8 @@
 /grader
 /__pycache__/
 /__pycache__
+/Dockerfile
+/localbuild.sh
 config.py
 
 # Compiled source #
