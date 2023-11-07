@@ -35,6 +35,7 @@ RUN apt-get update && apt-get -y install \
   bison \
   build-essential \
   clang \
+  clang-15 \
   clisp \
   cmake \
   cppcheck \
@@ -61,6 +62,7 @@ RUN apt-get update && apt-get -y install \
   libtool \
   libxml2-dev \
   llvm \
+  llvm-15 \
   locales \
   mysql-client \
   nasm \
