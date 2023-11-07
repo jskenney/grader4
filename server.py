@@ -66,11 +66,17 @@ while True:
         DOCKER_CPUS = BASE_CONFIG[BASE]['DOCKER_CPUS']
         DOCKER_MEM_LIMIT = BASE_CONFIG[BASE]['DOCKER_MEM_LIMIT']
         DOCKER_USER = 666
+        DOCKER_CAP_ADD = []
+        DOCKER_CAP_DROP = ['all']
         TMPFS = {}
         if 'TMPFS' in BASE_CONFIG[BASE]:
             TMPFS = BASE_CONFIG[BASE]['TMPFS']
         if 'USER' in BASE_CONFIG[BASE]:
             DOCKER_USER = BASE_CONFIG[BASE]['USER']
+        if 'CAP_DROP' in BASE_CONFIG[BASE]:
+            DOCKER_CAP_DROP = BASE_CONFIG[BASE]['CAP_DROP']
+        if 'CAP_ADD' in BASE_CONFIG[BASE]:
+            DOCKER_CAP_ADD = BASE_CONFIG[BASE]['CAP_ADD']
 
         ##############################################################################
         # Retrieve submissions waiting to be processed, if a submissionID (sid)
@@ -191,9 +197,9 @@ CMD python3 client.py --base """ + client_base + """
                 img = client.images.build(path=".",dockerfile=DF)
                 # Run the image
                 if TMPFS == {}:
-                    con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=DOCKER_USER, cap_drop=['all'])
+                    con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=DOCKER_USER, cap_drop=DOCKER_CAP_DROP, cap_add=DOCKER_CAP_ADD)
                 else:
-                    con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=DOCKER_USER, cap_drop=['all'], tmpfs=TMPFS)
+                    con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=DOCKER_USER, cap_drop=DOCKER_CAP_DROP, cap_add=DOCKER_CAP_ADD, tmpfs=TMPFS)
                 container_list[con.short_id] = time.time()
                 print("  Starting Container: (", client_base,")", con.short_id)
 
