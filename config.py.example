@@ -12,7 +12,8 @@ BASE_CONFIG = {'cs-base':
                          {'INSTANCES': 8,
                           'DOCKER_CPUS': '1-20',
                           'DOCKER_MEM_LIMIT': '16g',
-                          'TMPFS': {'/ramdisk':'size=2G'}
+                          'TMPFS': {'/ramdisk':'size=2G'},
+                          'USER': 666
                          }
               }
 

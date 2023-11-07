@@ -65,9 +65,12 @@ while True:
         INSTANCES = BASE_CONFIG[BASE]['INSTANCES']
         DOCKER_CPUS = BASE_CONFIG[BASE]['DOCKER_CPUS']
         DOCKER_MEM_LIMIT = BASE_CONFIG[BASE]['DOCKER_MEM_LIMIT']
+        DOCKER_USER = 666
         TMPFS = {}
         if 'TMPFS' in BASE_CONFIG[BASE]:
             TMPFS = BASE_CONFIG[BASE]['TMPFS']
+        if 'USER' in BASE_CONFIG[BASE]:
+            DOCKER_USER = BASE_CONFIG[BASE]['USER']
 
         ##############################################################################
         # Retrieve submissions waiting to be processed, if a submissionID (sid)
@@ -188,9 +191,9 @@ CMD python3 client.py --base """ + client_base + """
                 img = client.images.build(path=".",dockerfile=DF)
                 # Run the image
                 if TMPFS == {}:
-                    con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=666, cap_drop=['all'])
+                    con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=DOCKER_USER, cap_drop=['all'])
                 else:
-                    con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=666, cap_drop=['all'], tmpfs=TMPFS)
+                    con=client.containers.run(img[0], auto_remove=True, cpuset_cpus=DOCKER_CPUS, mem_limit=DOCKER_MEM_LIMIT, remove=True, detach=True, user=DOCKER_USER, cap_drop=['all'], tmpfs=TMPFS)
                 container_list[con.short_id] = time.time()
                 print("  Starting Container: (", client_base,")", con.short_id)
 
