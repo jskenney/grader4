@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+
+BASE_CONFIG = {
+               'db-base':
+                         {'INSTANCES': 1,
+                          'DOCKER_CPUS': '121-122',
+                          'DOCKER_MEM_LIMIT': '16g',
+                          'USER': 0,
+                          'CAP_DROP': [],
+                          'CAP_ADD': [],
+                          'xxxTMPFS': {'/var/lib/mysql':'size=1G'}
+                         }
+              }
+
