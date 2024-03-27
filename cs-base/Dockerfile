@@ -105,7 +105,7 @@ RUN echo "Options = UnsafeLegacyRenegotiation" | tee -a /etc/ssl/openssl.cnf
 RUN curl -k http://apt.cs.usna.edu/ssl/install-ssl-system-docker.sh -o /tmp/install-ssl-system-docker.sh && bash /tmp/install-ssl-system-docker.sh
 
 # For Dan's Class
-RUN apt-add-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get -y install python3.11 python3.11-venv
+RUN apt-add-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get -y install python3.11 python3.11-venv python3.12 python3.12-venv
 
 # Install any needed packages specified in requirements.txt
 RUN pip3 install --trusted-host pypi.python.org --upgrade setuptools
@@ -119,4 +119,3 @@ RUN chown -R 666 /root
 
 # Add user submit with homedir /root and uid 666
 RUN useradd -d /root -s /bin/bash -u 666 submit
-
