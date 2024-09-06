@@ -97,6 +97,8 @@ try:
     # Select docker base image
     if args.base != '%':
         BASE = args.base[0]
+    else:
+        BASE = 'cs-base'
 
     # Change debugging level
     if args.debug != '%':
