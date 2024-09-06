@@ -1,4 +1,4 @@
-# Grader Base Image, this is what will be used to run the software
+# Grader Base Docker Image, this is what will be used to run the software
 
 # Edit the dns settings if Academy settings cause issues with networking
 # vim /etc/docker/daemon.json and ADD
@@ -80,6 +80,22 @@ RUN apt-get update && apt-get -y install \
   python3-pip \
   python3-openssl \
   python3-setuptools \
+  python3-pytest \
+  python3-pandas \
+  python3-numpy \
+  python3-scipy \
+  python3-nltk \
+  python3-matplotlib \
+  python3-networkx \
+  python3-lxml \
+  python3-nltk \
+  python3-virtualenv \
+  python3-pycryptodome \
+  python3-requests \
+  python3-sqlparse \
+  python3-plotly \
+  python3-bs4 \
+  python3-opencv \
   racket \
   tofrodos \
   unrar \
@@ -98,6 +114,7 @@ RUN apt-get update && apt-get -y install \
   junit4 \
 && rm -rf /var/lib/apt/lists/*
 
+# Update locales
 RUN locale-gen en_US && update-locale LANG=en_US
 
 # Apparently we need to worry about certs now
@@ -106,10 +123,6 @@ RUN curl -k http://apt.cs.usna.edu/ssl/install-ssl-system-docker.sh -o /tmp/inst
 
 # For Dan's Class
 RUN apt-add-repository -y ppa:deadsnakes/ppa && apt-get update && apt-get -y install python3.11 python3.11-venv python3.12 python3.12-venv
-
-# Install any needed packages specified in requirements.txt
-RUN pip3 install --trusted-host pypi.python.org --upgrade setuptools
-RUN pip3 install --trusted-host pypi.python.org -r python.requirements.txt
 
 # Install software for maven
 RUN bash make_m2.sh

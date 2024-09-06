@@ -1,13 +1,16 @@
-# Grader Base Image, this is what will be used to run the software
+# Grader Database Base Docker Image, this is what will be used to run the software
 
-# Edit the dns settings if Academy settings cause issues with networking
-# vim /etc/docker/daemon.json and ADD
-#{
-#    "dns": ["10.1.74.10"]
-#}
-
-# To build run (make sure your user is in the docker group)
-# docker build -t cs-base .
+# BASE_CONFIG = {
+#                'db-base':
+#                          {'INSTANCES': 1,
+#                           'DOCKER_CPUS': '121-122',
+#                           'DOCKER_MEM_LIMIT': '16g',
+#                           'USER': 0,
+#                           'CAP_DROP': [],
+#                           'CAP_ADD': [],
+#                           'xxxTMPFS': {'/var/lib/mysql':'size=1G'}
+#                          }
+#               }
 
 # Use the base ubuntu image as a starting point
 FROM cs-base
@@ -39,9 +42,10 @@ RUN service mysql start && mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u ro
 
 RUN locale-gen en_US && update-locale LANG=en_US
 
-# Install any needed packages specified in requirements.txt
-#RUN pip3 install --trusted-host pypi.python.org --upgrade setuptools
-#RUN pip3 install --trusted-host pypi.python.org -r python.requirements.txt
+RUN echo 'sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"' | tee -a /etc/mysql/mysql.conf.d/mysqld.cnf
+RUN echo "default-storage-engine = InnoDB"     | tee -a /etc/mysql/mysql.conf.d/mysqld.cnf
+RUN echo "innodb_checksum_algorithm = crc32"   | tee -a /etc/mysql/mysql.conf.d/mysqld.cnf
+RUN echo "log_bin_trust_function_creators = 1" | tee -a /etc/mysql/mysql.conf.d/mysqld.cnf
 
 # Change the root permissions to user 666 (submit grader)
 RUN chown -R 666 /root
