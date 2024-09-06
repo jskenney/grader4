@@ -17,6 +17,9 @@ BASE_CONFIG = {'cs-base':
                          }
               }
 
+# List the Default Base
+BASE_DEFAULT = 'cs-base'
+
 # Time to wait before checking for new submissions (if none in queue)
 DELAYCHECK = 2
 

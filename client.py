@@ -98,7 +98,7 @@ try:
     if args.base != '%':
         BASE = args.base[0]
     else:
-        BASE = 'cs-base'
+        BASE = BASE_DEFAULT
 
     # Change debugging level
     if args.debug != '%':
