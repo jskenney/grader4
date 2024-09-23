@@ -6,7 +6,7 @@
 # Submit Server Information
 from config import *
 
-# Submit System Grader Version 3.0
+# Submit System Grader Version 4.0
 # This is the client, and will handle the grading and
 # processing of a SINGLE submission to a project.  The
 # System will communicate with the server via API calls
@@ -80,7 +80,7 @@ LINT = ''
 # Retrieve submissions waiting to be processed, if a submissionID (sid)
 # was provided as part of the command line, submit that to the system
 # for processing.
-print('GraderV3')
+print('GraderV4')
 
 try:
 
@@ -116,14 +116,14 @@ try:
 
     # Verify that there are results to work with
     if 'results' not in submission_list or len(submission_list['results']) < 1:
-        print('GraderV3 - Nothing to Process - Exiting.')
+        print('GraderV4 - Nothing to Process - Exiting.')
         sys.exit(2)
 
     # Connect to the local docker server
     DOCKER = platform.node()
 
     # Status
-    print('GraderV3 - Processing next submission - '+DOCKER)
+    print('GraderV4 - Processing next submission - '+DOCKER)
 
     # Work with a specific submission
     submission = submission_list['results']
