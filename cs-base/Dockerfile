@@ -112,6 +112,7 @@ RUN apt-get update && apt-get -y install \
   chezscheme \
   chezscheme-doc \
   junit4 \
+  vim \
 && rm -rf /var/lib/apt/lists/*
 
 # Update locales
