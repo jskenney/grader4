@@ -12,14 +12,6 @@ from config import *
 # System will communicate with the server via API calls
 # exclusively with no direct database access.
 
-def debugPrint(tf, line):
-    if tf:
-        try:
-            print(line)
-        except Exception as e:
-            print('--unable-to-print--')
-            print(e)
-
 # Load in required Libraries.
 import sys
 if sys.version_info.major != 3:
@@ -36,6 +28,28 @@ except:
     print("Use (for python3):")
     print("pip3 install requests")
     sys.exit(2)
+
+# Set Debug to on by default
+DEBUG = True
+
+# A simple storage class in case we are in debug mode
+class storedebug:
+    def __init__(self, name):
+        if name == '%':
+            name = './debug'
+        self.name = name
+        os.makedirs(self.name, exist_ok=True)
+    def cleanup(self):
+        pass
+
+# Print out information, with a safeguard.
+def debugPrint(tf, line):
+    if tf:
+        try:
+            print(line)
+        except Exception as e:
+            print('--unable-to-print--')
+            print(e)
 
 # Retrieve information from a REST style API
 # Return the results in a python style dictionary
@@ -91,7 +105,7 @@ try:
     parser.add_argument('--base', dest='base', metavar='DOCKERBASE', default='%', nargs=1, help='select default docker image')
     parser.add_argument('--user', dest='user', metavar='USER', default='%', nargs=1, help='select a user to process')
     parser.add_argument('--rulename', dest='rulename', metavar='RULENAME', default='%', nargs=1, help='select a specific testcase to run')
-    parser.add_argument('--debug', dest='debug', metavar='DEBUGVALUE', default='%', nargs='?', help='set a specific delay to allow file system debugging')
+    parser.add_argument('--storedir', dest='storedir', metavar='STORDIR', default='%', nargs=1, help='set a specific output location for downloads')
     args = parser.parse_args()
 
     # Select docker base image
@@ -99,14 +113,6 @@ try:
         BASE = args.base[0]
     else:
         BASE = BASE_DEFAULT
-
-    # Change debugging level
-    if args.debug != '%':
-        DEBUG = True
-        try:
-            args.debug = int(args.debug)
-        except:
-            args.debug = '%'
 
     # Retrieve a specific project/user/test to process, override already completed if specificed manually
     if args.course != '%' and args.project != '%' and args.user != '%' and args.rulename != '%':
@@ -135,9 +141,14 @@ try:
     # Claim this submission via the API
     post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'setup', 'process':DOCKER, 'lint':LINT})
 
-    # Create a Temporary Directory to work with
+    # Determine where the grader is starting
     origdir = os.getcwd()
-    stordir = tempfile.TemporaryDirectory()
+
+    # Create a Temporary Directory to work with
+    if args.storedir != '%' and args.storedir != ['%']:
+        stordir = storedebug(args.storedir[0])
+    else:
+        stordir = tempfile.TemporaryDirectory()
     os.chdir(stordir.name)
 
     ##############################################################################
@@ -288,15 +299,6 @@ try:
         final = '0'
 
     data = post_api_json(API+'/results/run', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'returnval':return_code, 'stime':etime, 'stdout':stdout, 'stderr':stderr, 'sourcefile':sourcefile, 'pass':final, 'diff':diffval})
-
-    ##############################################################################
-    # DEBUG - Final Debugging Opportunity
-    if DEBUG and args.debug != '%':
-        debugPrint(DEBUG, 'STORAGE:')
-        debugPrint(DEBUG, stordir.name)
-        debugPrint(DEBUG, '')
-        post_api_json(API+'/results/status', {'apikey':KEY, 'sid':submission['sid'], 'tid':submission['tid'], 'status':'debug '+stordir.name, 'process':DOCKER, 'lint':LINT})
-        time.sleep(args.debug)
 
     ##############################################################################
     # Destroy the main temporary Directory
