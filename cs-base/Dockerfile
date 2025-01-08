@@ -10,7 +10,7 @@
 # docker build -t cs-base .
 
 # Use the base ubuntu image as a starting point
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # Set the working directory to /app
 WORKDIR /app
@@ -73,6 +73,7 @@ RUN apt-get update && apt-get -y install \
   r-base \
   r-base-dev \
   r-cran-rmysql \
+  r-cran-tidyverse \
   python3-mysqldb \
   python3-mysql.connector \
   python3-dev \
@@ -96,6 +97,7 @@ RUN apt-get update && apt-get -y install \
   python3-plotly \
   python3-bs4 \
   python3-opencv \
+  python3-gensim \
   racket \
   tofrodos \
   unrar \

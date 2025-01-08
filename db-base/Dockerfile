@@ -32,9 +32,6 @@ RUN echo "Acquire::http::Proxy \"http://apt.cs.usna.edu:3142\";" | tee /etc/apt/
 
 # Install any required Ubuntu Packages
 RUN apt-get update && apt-get -y install \
-  r-base \
-  r-base-dev \
-  r-cran-rmysql \
   mysql-server \
 && rm -rf /var/lib/apt/lists/*
 
