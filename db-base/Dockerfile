@@ -35,7 +35,7 @@ RUN apt-get update && apt-get -y install \
   mysql-server \
 && rm -rf /var/lib/apt/lists/*
 
-RUN service mysql start && mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql && echo 'sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"' | tee -a /etc/mysql/mysql.conf.d/mysqld.cnf && echo "default-time-zone='US/Eastern'" | tee -a /etc/mysql/mysql.conf.d/mysqld.cnf && mysql -u root mysql -e "CREATE USER 'demo'@'%' IDENTIFIED BY 'demopw';" && mysql -u root mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'demo'@'%' WITH GRANT OPTION;" && mysql -u root mysql -e "CREATE DATABASE demo;"
+RUN service mysql start && mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql && echo 'sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"' | tee -a /etc/mysql/mysql.conf.d/mysqld.cnf && echo "default-time-zone='America/New_York'" | tee -a /etc/mysql/mysql.conf.d/mysqld.cnf && mysql -u root mysql -e "CREATE USER 'demo'@'%' IDENTIFIED BY 'demopw';" && mysql -u root mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'demo'@'%' WITH GRANT OPTION;" && mysql -u root mysql -e "CREATE DATABASE demo;"
 
 RUN locale-gen en_US && update-locale LANG=en_US
 

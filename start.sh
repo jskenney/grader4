@@ -1,3 +1,3 @@
 #!/bin/bash
 
-tmux new-session -d -s grader './run-in-loop.sh'
+tmux new-session -s grader './run-in-loop.sh'
