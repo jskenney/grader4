@@ -1,6 +1,12 @@
 #!/bin/bash
 
 echo """
+The following is the Dockerfile contents:
+"""
+
+cat Dockerfile
+
+echo """
 usage: client.py [-h] [--course COURSE] [--project PROJECT] [--base DOCKERBASE] [--user USER] [--rulename RULENAME] [--storedir STORDIR]
 
 Autograde an available job.
