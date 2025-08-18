@@ -114,8 +114,7 @@ RUN apt-get update && apt-get -y install \
   chezscheme \
   chezscheme-doc \
   junit4 \
-  python3-mypy \
-  python3-mypy-extensions \
+  mypy \
   vim \
 && rm -rf /var/lib/apt/lists/*
 
