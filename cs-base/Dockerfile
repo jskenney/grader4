@@ -98,6 +98,7 @@ RUN apt-get update && apt-get -y install \
   python3-bs4 \
   python3-opencv \
   python3-gensim \
+  python3-yaml \
   racket \
   tofrodos \
   unrar \
