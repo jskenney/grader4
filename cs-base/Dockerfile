@@ -45,6 +45,7 @@ RUN apt-get update && apt-get -y install \
   expect \
   flex \
   g++ \
+  gambc \
   gcc-multilib \
   libbsd-dev \
   libcairo2-dev \
