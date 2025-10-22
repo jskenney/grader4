@@ -33,6 +33,7 @@ RUN apt-get update && apt-get -y install \
   autoconf \
   automake \
   bison \
+  bc \
   build-essential \
   clang \
   clang-15 \
