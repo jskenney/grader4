@@ -87,6 +87,7 @@ RUN apt-get update && apt-get -y install \
   python3-pandas \
   python3-numpy \
   python3-scipy \
+  python3-seaborn \
   python3-nltk \
   python3-matplotlib \
   python3-networkx \
