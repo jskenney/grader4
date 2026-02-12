@@ -1,6 +1,7 @@
 #!/bin/bash
 
 rm -f /tmp/grader-update.sh
+touch /tmp/stopsubmit
 
 cat << EOF > /tmp/grader-update.sh
 #!/bin/bash
@@ -27,6 +28,7 @@ popd
 echo 'did it work db-base?'
 read foo
 
+rm -f /tmp/stopsubmit
 EOF
 
 chmod 755 /tmp/grader-update.sh
