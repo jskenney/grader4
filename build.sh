@@ -19,16 +19,14 @@ pushd cs-base
 popd
 
 echo 'did it work cs-base?'
-read foo
+#read foo
 
 pushd db-base
 ./build.sh
 popd
 
-
-
 echo 'did it work db-base?'
-read foo
+#read foo
 
 rm -f /tmp/stopsubmit
 EOF
