@@ -109,8 +109,8 @@ RUN apt-get update && apt-get -y install \
   yasm \
   zip \
   zlib1g-dev \
-  openjdk-11-jdk \
-  openjdk-17-jdk \
+  default-jdk-headless \
+  default-jre-headless \
   maven \
   valgrind \
   spim \
