@@ -37,3 +37,4 @@ chmod 755 /tmp/grader-update.sh
 
 tmux attach -t grader
 tmux new-session -s grader /tmp/grader-update.sh
+tmux new-session -d -s grader 'cd ~/grader4 && ./run-in-loop.sh'
