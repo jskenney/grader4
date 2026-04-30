@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git pull
+
 rm -f /tmp/grader-update.sh
 touch /tmp/stopsubmit
 
