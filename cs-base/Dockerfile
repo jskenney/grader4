@@ -69,6 +69,7 @@ RUN apt-get update && apt-get -y install \
   mysql-client \
   nasm \
   ncurses-dev \
+  netcat-openbsd \
   default-jre \
   perl \
   pkg-config \
