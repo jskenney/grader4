@@ -179,8 +179,10 @@ while True:
         if 'results' in submission_list and len(submission_list['results']) > 0 and len(ccl) < INSTANCES and not os.path.isfile(KILL_FILE):
 
             # cleanup
-            client.images.prune()
-            client.containers.prune()
+            if 'PRUNE' in locals() or 'PRUNE' in globals():
+                print('Starting Prune')
+                client.images.prune()
+                client.containers.prune()
 
             for build in range(min(INSTANCES-len(ccl), len(docker_bases_pop))):
 

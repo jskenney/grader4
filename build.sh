@@ -10,8 +10,8 @@ cat << EOF > /tmp/grader-update.sh
 
 ###############################################################################
 # Delete all docker containers and images do:
-docker rm \$(docker ps -a -q)
-docker rmi \$(docker images -q)
+docker rm $(docker ps -a -q)
+docker rmi $(docker images -q)
 docker system prune -a -f
 
 ###############################################################################
@@ -21,14 +21,14 @@ pushd cs-base
 popd
 
 echo 'did it work cs-base?'
-#read foo
+read foo
 
 pushd db-base
 ./build.sh
 popd
 
 echo 'did it work db-base?'
-#read foo
+read foo
 
 rm -f /tmp/stopsubmit
 EOF
